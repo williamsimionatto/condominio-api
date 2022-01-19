@@ -17,16 +17,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('auth/login', [AuthController::class, 'login']);
- 
+
 Route::group(['middleware'=>'apiJWT'], function() {
     Route::group(['prefix'=>'auth'], function() {
-        Route::get('me', [AuthController::class, 'me']); 
-        Route::get('logout', [AuthController::class, 'logout']); 
-        Route::get('refresh', [AuthController::class, 'refresh']); 
+        Route::get('me', [AuthController::class, 'me']);
+        Route::get('logout', [AuthController::class, 'logout']);
+        Route::get('refresh', [AuthController::class, 'refresh']);
     });
 
-    Route::group(['prefix'=>'users', 'where'=>['id'=>'[0-9]+']], function() {
-        Route::any('', [UserController::class, 'index']);
-        Route::get('/users', [UserController::class, 'index']); 
+    Route::group(['prefix'=>'user', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::any('', [UserController::class, 'getAll']);
+        Route::get('/', [UserController::class, 'getAll']);
+        Route::get('/{id}', [UserController::class, 'getById']);
+        Route::post('/', [UserController::class, 'save']);
+        Route::put('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'delete']);
     });
 });
