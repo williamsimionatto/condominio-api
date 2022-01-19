@@ -18,9 +18,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthController::class, 'login']);
  
-Route::middleware(['apiJWT'])->group(function () {
-    Route::get('auth/me', [AuthController::class, 'me']); 
-    Route::get('auth/logout', [AuthController::class, 'logout']); 
-    Route::get('auth/refresh', [AuthController::class, 'refresh']); 
-    Route::get('/users', [UserController::class, 'index']); 
+Route::group(['middleware'=>'apiJWT'], function() {
+    Route::group(['prefix'=>'auth'], function() {
+        Route::get('me', [AuthController::class, 'me']); 
+        Route::get('logout', [AuthController::class, 'logout']); 
+        Route::get('refresh', [AuthController::class, 'refresh']); 
+    });
+
+    Route::group(['prefix'=>'users', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::any('', [UserController::class, 'index']);
+        Route::get('/users', [UserController::class, 'index']); 
+    });
 });
