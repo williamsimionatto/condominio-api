@@ -31,6 +31,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::get('/{id}', [UserController::class, 'getById']);
         Route::post('/', [UserController::class, 'save']);
         Route::put('/refreshpassword/{id}', [UserController::class, 'refreshPassword']);
+        Route::put('/verifypassword/{id}', [UserController::class, 'verifyPassword']);
         Route::put('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'delete']);
     });
