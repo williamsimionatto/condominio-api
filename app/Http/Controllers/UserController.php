@@ -36,7 +36,7 @@ class UserController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $fields = $request->only('name', 'email');
+        $fields = $request->only('name', 'email', 'active');
 
         $validator = Validator::make($fields, [
             'name' => 'required|string|max:255',
