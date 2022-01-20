@@ -57,4 +57,19 @@ class UserController extends Controller {
         $user->delete();
         return response()->json($user);
     }
+
+    public function refreshPassword(Request $request, $id) {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors'=>$validator->errors()->all()], 422);
+        }
+
+        $user = User::find($id);
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return response()->json($user);
+    }
 }
