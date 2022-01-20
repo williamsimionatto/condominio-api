@@ -72,4 +72,14 @@ class UserController extends Controller {
         $user->save();
         return response()->json($user);
     }
+
+    public function verifyPassword(Request $request, $id) {
+        $user = User::find($id);
+        $password = $request->password;
+        if (Hash::check($password, $user->password)) {
+            return response(['ok'=>true], 201);
+        } else {
+            return response(['errors'=>['Senha Atual Incorreta']], 422);
+        }
+    }
 }
