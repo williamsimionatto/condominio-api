@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
  
 class AuthController extends Controller {
@@ -10,12 +11,19 @@ class AuthController extends Controller {
  
     public function login(Request $request) {
         $credentials = $request->only(['email', 'password']);
- 
-        if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $token = auth('api')->attempt($credentials);
+        $user = User::where('email', $request->email)->select(['id', 'name', 'email', 'active'])->first();
+
+        if (!$token || $user->active === 'N') {
+            return response()->json(['error' => 'Credenciais Inválidas'], 401);
         }
 
-        return $this->respondWithToken($token);
+        $response = [
+            'access_token' => $token,
+            'user' => $user,
+        ];
+
+        return $this->respondWithToken($response);
     }
 
     public function me() {
