@@ -42,7 +42,7 @@ class AuthController extends Controller {
 
     protected function respondWithToken($data) {
         return response()->json([
-            'data' => $data
+            $data
         ]);
     }
 }
