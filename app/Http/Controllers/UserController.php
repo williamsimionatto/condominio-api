@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 class UserController extends Controller {
     public function getAll(Request $request) {
-        $users = User::all()->select('users.*', 'users.password as password_confirmation');
+        $users = User::select('users.*', 'users.password as password_confirmation')->get();
         return response()->json($users);
     }
 
     public function getById(Request $request, $id) {
-        $user = User::find($id)->select('users.*', 'users.password as password_confirmation');
+        $user = User::select('users.*', 'users.password as password_confirmation')->where('id', $id)->first();
         return response()->json($user);
     }
 
@@ -40,7 +40,7 @@ class UserController extends Controller {
 
         $validator = Validator::make($fields, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users'
+            'email' => 'required|string|email|max:255'
         ]);
 
         if ($validator->fails()) {
