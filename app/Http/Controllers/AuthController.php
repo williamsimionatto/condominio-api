@@ -40,11 +40,9 @@ class AuthController extends Controller {
         return $this->respondWithToken(auth()->refresh());
     }
 
-    protected function respondWithToken($token) {
+    protected function respondWithToken($data) {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'data' => $data
         ]);
     }
 }
