@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 class UserController extends Controller {
     public function getAll(Request $request) {
-        $users = User::all();
+        $users = User::all()->select('users.*', 'users.password as password_confirmation');
         return response()->json($users);
     }
 
     public function getById(Request $request, $id) {
-        $user = User::find($id);
+        $user = User::find($id)->select('users.*', 'users.password as password_confirmation');
         return response()->json($user);
     }
 
@@ -21,7 +21,7 @@ class UserController extends Controller {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         if ($validator->fails()) {
@@ -36,10 +36,11 @@ class UserController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $validator = Validator::make($request->all(), [
+        $fields = $request->only('name', 'email');
+
+        $validator = Validator::make($fields, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'email' => 'required|string|email|max:255|unique:users'
         ]);
 
         if ($validator->fails()) {
@@ -47,7 +48,7 @@ class UserController extends Controller {
         }
 
         $user = User::find($id);
-        $user->update($request->all());
+        $user->update($fields);
         return response()->json($user);
     }
 
