@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Repository\Eloquent\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
 class UserController extends Controller {
+    private $repository;
+
+    public function __construct(UserRepository $repository) {
+        $this->repository = $repository;
+    }
+
     public function getAll(Request $request) {
-        $users = User::select('users.*', 'users.password as password_confirmation')->get();
+        $users = $this->repository->getAll();
         return response()->json($users);
     }
 
     public function getById(Request $request, $id) {
-        $user = User::select('users.*', 'users.password as password_confirmation')->where('id', $id)->first();
+        $user = $this->repository->getById($id);
         return response()->json($user);
     }
 
@@ -31,7 +38,7 @@ class UserController extends Controller {
         $password = Hash::make($request->password);
         $request->offsetSet('password', $password);
 
-        $user = User::create($request->all());
+        $user = $this->repository->save($request->all());
         return response()->json($user);
     }
 
@@ -47,14 +54,12 @@ class UserController extends Controller {
             return response(['errors'=>$validator->errors()->all()], 422);
         }
 
-        $user = User::find($id);
-        $user->update($fields);
+        $user = $this->repository->update($id, $fields);
         return response()->json($user);
     }
 
     public function delete(Request $request, $id) {
-        $user = User::find($id);
-        $user->delete();
+        $user = $this->repository->delete($id);
         return response()->json($user);
     }
 
@@ -67,15 +72,12 @@ class UserController extends Controller {
             return response(['errors'=>$validator->errors()->all()], 422);
         }
 
-        $user = User::find($id);
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $algo = Hash::make($request->password);
+        $user = $this->repository->refreshPassword($id, $algo);
         return response()->json($user);
     }
 
     public function verifyPassword(Request $request, $id) {
-        $user = User::find($id);
-        $password = $request->password;
-        return response(['ok'=>Hash::check($password, $user->password)]);
+        return $this->repository->verifyPassword($id, $request->password);
     }
 }
