@@ -2,80 +2,86 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Helpers\Validator;
+use App\Repository\Eloquent\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+
 class UserController extends Controller {
+    private $repository;
+    private $validator;
+
+    public function __construct(UserRepository $repository, Validator $validator) {
+        $this->repository = $repository;
+        $this->validator = $validator;
+    }
+
     public function getAll(Request $request) {
-        $users = User::select('users.*', 'users.password as password_confirmation')->get();
+        $users = $this->repository->getAll();
         return response()->json($users);
     }
 
     public function getById(Request $request, $id) {
-        $user = User::select('users.*', 'users.password as password_confirmation')->where('id', $id)->first();
+        $user = $this->repository->getById($id);
         return response()->json($user);
     }
 
     public function save(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+        $data = $request->all();
+        $rules = [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:6|confirmed',
+            ];
+        
+        $this->validateFields($data, $rules);
 
-        if ($validator->fails()) {
-            return response(['errors'=>$validator->errors()->all()], 422);
-        }
+        $algo = Hash::make($request->password);
+        $request->offsetSet('password', $algo);
 
-        $password = Hash::make($request->password);
-        $request->offsetSet('password', $password);
-
-        $user = User::create($request->all());
+        $user = $this->repository->save($request->all());
         return response()->json($user);
     }
 
     public function update(Request $request, $id) {
         $fields = $request->only('name', 'email', 'active');
-
-        $validator = Validator::make($fields, [
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255'
-        ]);
+        ];
 
-        if ($validator->fails()) {
-            return response(['errors'=>$validator->errors()->all()], 422);
-        }
+        $this->validateFields($fields, $rules);
 
-        $user = User::find($id);
-        $user->update($fields);
+        $user = $this->repository->update($id, $fields);
         return response()->json($user);
     }
 
     public function delete(Request $request, $id) {
-        $user = User::find($id);
-        $user->delete();
+        $user = $this->repository->delete($id);
         return response()->json($user);
     }
 
     public function refreshPassword(Request $request, $id) {
-        $validator = Validator::make($request->all(), [
+        $data = $request->all();
+        $rules = [
             'password' => 'required|string|min:6|confirmed',
-        ]);
+        ];
 
-        if ($validator->fails()) {
-            return response(['errors'=>$validator->errors()->all()], 422);
-        }
+        $this->validateFields($data, $rules);
 
-        $user = User::find($id);
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $algo = Hash::make($request->password);
+        $user = $this->repository->refreshPassword($id, $algo);
         return response()->json($user);
     }
 
     public function verifyPassword(Request $request, $id) {
-        $user = User::find($id);
-        $password = $request->password;
-        return response(['ok'=>Hash::check($password, $user->password)]);
+        return $this->repository->verifyPassword($id, $request->password);
+    }
+
+    private function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            return response(['errors'=>$isValid['errors']], 422);
+        }
     }
 }

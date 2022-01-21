@@ -5,21 +5,20 @@ namespace App\Providers;
 use App\Helpers\Validator;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class ValidatorServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      *
      * @return void
      */
     public function register()
     {
-        $this->app->register(RepositoryServiceProvider::class);
-        $this->app->register(ValidatorServiceProvider::class);
+        $this->app->bind(Validator::class, Validator::class);
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      *
      * @return void
      */
