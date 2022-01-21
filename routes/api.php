@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,5 +35,14 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::put('/verifypassword/{id}', [UserController::class, 'verifyPassword']);
         Route::put('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'delete']);
+    });
+
+    Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::any('', [PerfilController::class, 'getAll']);
+        Route::get('/', [PerfilController::class, 'getAll']);
+        Route::get('/{id}', [PerfilController::class, 'getById']);
+        Route::post('/', [PerfilController::class, 'save']);
+        Route::put('/{id}', [PerfilController::class, 'update']);
+        Route::delete('/{id}', [PerfilController::class, 'delete']);
     });
 });
