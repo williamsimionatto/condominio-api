@@ -48,7 +48,11 @@ class PerfilController extends Controller {
 
     public function delete(Request $request, $id) {
         $perfil = $this->repository->delete($id);
-        return response()->json($perfil);
+        if ($perfil) {
+            return response()->json($perfil);
+        } else {
+            return response('', 500);
+        }
     }
 
     private function validateFields(Array $data, Array $rules) {

@@ -35,8 +35,11 @@ class BaseRepository implements EloquentRepositoryInterface {
     }
 
     public function delete($id) {
-        $model = $this->model::find($id);
-        $model->delete();
-        return $model;
+        try {
+            $model = $this->model::where('id', $id)->delete();
+            return $model;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
