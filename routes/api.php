@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\PermissaoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,5 +45,14 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::post('/', [PerfilController::class, 'save']);
         Route::put('/{id}', [PerfilController::class, 'update']);
         Route::delete('/{id}', [PerfilController::class, 'delete']);
+    });
+
+    Route::group(['prefix'=>'permissao', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::any('', [PermissaoController::class, 'getAll']);
+        Route::get('/', [PermissaoController::class, 'getAll']);
+        Route::get('/{id}', [PermissaoController::class, 'getById']);
+        Route::post('/', [PermissaoController::class, 'save']);
+        Route::put('/{id}', [PermissaoController::class, 'update']);
+        Route::delete('/{id}', [PermissaoController::class, 'delete']);
     });
 });
