@@ -44,7 +44,7 @@ class UserController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $fields = $request->only('name', 'email', 'active');
+        $fields = $request->only('name', 'email', 'active', 'perfil_id');
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255'

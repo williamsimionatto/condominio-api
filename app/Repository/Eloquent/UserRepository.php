@@ -19,11 +19,15 @@ class UserRepository  extends BaseRepository implements UserRepositoryInterface 
     }
 
     public function getAll() {
-        return $this->model::select('users.*', 'users.password as password_confirmation')->get();
+        return $this->model::select(['users.*', 'users.password as password_confirmation', 'perfil.id as perfilId', 'perfil.name as perfilName'])
+            ->join('perfil', 'perfil.id', '=', 'users.perfil_id')
+            ->get();
     }
 
     public function getById($id) {
-        return $this->model::select('users.*', 'users.password as password_confirmation')->where('id', $id)->first();
+        return $this->model::select(['users.*', 'users.password as password_confirmation', 'perfil.id as perfilId', 'perfil.name as perfilName'])
+            ->join('perfil', 'perfil.id', '=', 'users.perfil_id')
+            ->where('users.id', $id)->first();
     }
 
     public function refreshPassword($id, $password) {
