@@ -13,4 +13,8 @@ class Permissao extends Model {
         'name',
         'sigla',
     ];
+
+    public function perfilPermissao() {
+        return $this->hasMany(PerfilPermissao::class, 'permissao');
+    }
 }
