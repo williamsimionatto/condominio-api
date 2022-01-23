@@ -3,17 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Validator;
+use App\Models\PerfilPermissao;
 use App\Repository\Eloquent\PerfilPermissaoRepository;
 use Illuminate\Http\Request;
 
 class PerfilPermissaoController extends Controller {
     private $repository;
     private $validator;
-    private $rules = [
-        'perfil' => 'required|integer',
-        'permissao' => 'required|integer',
-        'permissoes'=> 'required|array',
-    ];
 
     public function __construct(PerfilPermissaoRepository $repository, Validator $validator) {
         $this->repository = $repository;
@@ -22,18 +18,20 @@ class PerfilPermissaoController extends Controller {
 
     public function save(Request $request) {
         $data = $request->all();
-        $isValid = $this->validateFields($data, $this->rules);
+        $perfil = $data[0]['perfil'];
+        $this->repository->deletePermissoesByPerfil($perfil);
 
-        if ($isValid['fails']) {
-            return response()->json($isValid['errors'], 400);
-        }
+        foreach ($data as $index => $permissao) {
+            $salvar = [
+                'perfil' => $perfil,
+                'permissao' => $permissao['permissoes']['permissao'],
+                'consultar'=> $permissao['permissoes']['consultar'],
+                'inserir' => $permissao['permissoes']['inserir'],
+                'alterar' => $permissao['permissoes']['alterar'],
+                'excluir' => $permissao['permissoes']['excluir'],
+            ];
 
-        $this->repository->deletePermissoesByPerfil($data['perfil']);
-
-        foreach ($data['permissoes'] as $permissao) {
-            $permissao['perfil'] = $data['perfil'];
-            $permissao['permissao'] = $data['permissao'];	
-            $this->repository->save($permissao);
+            $this->repository->save($salvar);
         }
 
         return response('', 200);
