@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCondominosTable extends Migration
+class CreateCondominoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,8 +15,8 @@ class CreateCondominosTable extends Migration
     {
         Schema::create('condomino', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('condominio')->unsigned();
             $table->bigInteger('apartamento');
-            $table->bigInteger('condomino');
             $table->string('nome');
             $table->string('cpf');
             $table->string('sindico', 1)->default('N');
@@ -24,7 +24,11 @@ class CreateCondominosTable extends Migration
             $table->integer('numeroquartos');
             $table->timestamps();
 
-            $table->unique(['apartamento', 'condomino']);
+            $table->unique(['apartamento', 'condominio']);
+        });
+
+        Schema::table('condomino', function (Blueprint $table) {
+            $table->foreign('condominio')->references('id')->on('condominio');
         });
     }
 
