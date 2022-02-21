@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Condomino extends Model {
     use HasFactory;
-
-    $table = "condomino";
+    protected $table = "condomino";
 
     protected $fillable = [
         'apartamento',
@@ -19,4 +18,8 @@ class Condomino extends Model {
         'tipo',
         'numeroquartos'
     ];
+
+    public function leituraAgua() {
+        return $this->hasMany(LeituraAgua::class, 'condominio');
+    }
 }
