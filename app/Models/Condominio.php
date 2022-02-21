@@ -21,7 +21,7 @@ class Condominio extends Model {
         'valormudanca'
     ];
 
-    public function condomino() {
+    public function condominos() {
         return $this->hasMany(Condomino::class, 'condominio');
     }
 }
