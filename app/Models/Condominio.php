@@ -20,4 +20,8 @@ class Condominio extends Model {
         'valorlimpezasalaofestas',
         'valormudanca'
     ];
+
+    public function condomino() {
+        return $this->hasMany(Condomino::class, 'condominio');
+    }
 }

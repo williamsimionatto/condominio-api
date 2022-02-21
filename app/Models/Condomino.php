@@ -22,4 +22,8 @@ class Condomino extends Model {
     public function leituraAgua() {
         return $this->hasMany(LeituraAgua::class, 'condominio');
     }
+
+    public function condominio() {
+        return $this->belongsTo(Condominio::class, 'condominio');
+    }
 }
