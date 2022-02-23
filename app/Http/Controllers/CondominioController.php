@@ -18,6 +18,9 @@ class CondominioController extends Controller implements GetAllInterface,
                                                          DeleteByIdInterface {
     private $repository;
     private $validator;
+    private $rules = [
+        'name' => 'required|string|max:255',
+    ];
 
     public function __construct(CondominioRepository $repository, Validator $validator) {
         $this->repository = $repository;
@@ -36,33 +39,33 @@ class CondominioController extends Controller implements GetAllInterface,
 
     public function save(Request $request) {
         $data = $request->all();
-        $validation = $this->validator->validate($data);
-        if ($validation->fails()) {
-            return response()->json($validation->errors(), 500);
-        }
+        $this->validateFields($fields, $this->rules);
 
         $condominio = $this->repository->save($data);
     }
 
     public function update(Request $request, $id) {
         $data = $request->all();
-        $validation = $this->validator->validate($data);
-
-        if ($validation->fails()) {
-            return response()->json($validation->errors(), 500);
-        }
+        $this->validateFields($fields, $this->rules);
 
         $condominio = $this->repository->update($data, $id);
 
         return response()->json($condominio);
     }
 
-    public function deleteById($id) {
+    public function deleteById(Request $request, int $id) {
         $condominio = $this->repository->deleteById($id);
         if ($condominio) {
             return response()->json($condominio);
         }
-        
+
         return response()->json(['message' => 'Não foi possível excluir este condomínio'], 500);
+    }
+
+    private function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            return response(['errors'=>$isValid['errors']], 422);
+        }
     }
 }
