@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CNPJValidator;
 use App\Repository\Eloquent\CondominioRepository;
 use App\Interfaces\DeleteInterface;
 use App\Interfaces\GetAllInterface;
@@ -19,6 +20,8 @@ class CondominioController extends Controller implements GetAllInterface,
                                                          DeleteInterface {
     private $repository;
     private $validator;
+    private $cnpjValidator;
+
     private $rules = [
         'name' => 'required|string|max:255',
         'cnpj' => 'required|string|max:255',
@@ -31,9 +34,10 @@ class CondominioController extends Controller implements GetAllInterface,
         'valormudanca'=> 'required|numeric'
     ];
 
-    public function __construct(CondominioRepository $repository, Validator $validator) {
+    public function __construct(CondominioRepository $repository, Validator $validator, CNPJValidator $cnpjValidator) {
         $this->repository = $repository;
         $this->validator = $validator;
+        $this->cnpjValidator = $cnpjValidator;
     }
 
     public function getAll(): JsonResponse {
@@ -50,6 +54,10 @@ class CondominioController extends Controller implements GetAllInterface,
         $data = $request->all();
         $this->validateFields($data, $this->rules);
 
+        if (!$this->cnpjValidator->isValid($data['cnpj'])) {
+            return response()->json(['message' => 'CNPJ inválido'], 500);
+        }
+
         $condominio = $this->repository->save($data);
 
         return response()->json($condominio);
@@ -59,13 +67,17 @@ class CondominioController extends Controller implements GetAllInterface,
         $data = $request->all();
         $this->validateFields($fields, $this->rules);
 
+        if (!$this->cnpjValidator->isValid($data['cnpj'])) {
+            return response()->json(['message' => 'CNPJ inválido'], 500);
+        }
+
         $condominio = $this->repository->update($data, $id);
 
         return response()->json($condominio);
     }
 
     public function delete(Request $request, $id): JsonResponse {
-        $condominio = $this->repository->deleteById($id);
+        $condominio = $this->repository->delete($id);
         if ($condominio) {
             return response()->json($condominio);
         }

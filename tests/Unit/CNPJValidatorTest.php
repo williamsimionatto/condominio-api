@@ -24,7 +24,7 @@ class CNPJValidatorTest extends TestCase {
     public function testIsValidcnpj() {
         $stub = $this->getValidatorStub();
         $stub->method('isValid') ->willReturn(true);
-        $this->assertEquals(true, $stub->isValid('12345678901234'));
+        $this->assertEquals(true, $stub->isValid('49.278.393/0001-99'));
     }
 
     public function testNullCnpj() {
