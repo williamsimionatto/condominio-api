@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Interfaces;
+namespace App\Interfaces;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Interfaces;
+namespace App\Interfaces;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 interface DeleteInterface {
-    public function delete(Request $request, int $id): JsonResponse;
+    public function delete(Request $request, $id): JsonResponse;
 }

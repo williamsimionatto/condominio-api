@@ -2,24 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Validator;
-use App\Http\Interfaces\GetAllInterface;
-use App\Http\Interfaces\GetByIdInterface;
-use App\Http\Interfaces\SaveInterface;
-use App\Http\Interfaces\UpdateInterface;
-use App\Http\Interfaces\DeleteByIdInterface;
 use App\Repository\Eloquent\CondominioRepository;
+use App\Interfaces\DeleteInterface;
+use App\Interfaces\GetAllInterface;
+use App\Interfaces\GetByIdInterface;
+use App\Interfaces\SaveInterface;
+use App\Interfaces\UpdateInterface;
+use App\Helpers\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class CondominioController extends Controller implements GetAllInterface,
                                                          GetByIdInterface,
                                                          SaveInterface,
                                                          UpdateInterface,
-                                                         DeleteByIdInterface {
+                                                         DeleteInterface {
     private $repository;
     private $validator;
     private $rules = [
         'name' => 'required|string|max:255',
+        'cnpj' => 'required|string|max:255',
+        'condominio2quartos' => 'required|numeric',
+        'condominio3quartos' => 'required|numeric',
+        'condominiosalacomercial'=> 'required|numeric',
+        'valoragua'=> 'required|numeric',
+        'valorsalaofestas'=> 'required|numeric',
+        'valorlimpezasalaofestas'=> 'required|numeric',
+        'valormudanca'=> 'required|numeric'
     ];
 
     public function __construct(CondominioRepository $repository, Validator $validator) {
@@ -27,24 +36,26 @@ class CondominioController extends Controller implements GetAllInterface,
         $this->validator = $validator;
     }
 
-    public function getAll() {
+    public function getAll(): JsonResponse {
         $condominios = $this->repository->getAll();
         return response()->json($condominios);
     }
 
-    public function getById($id) {
+    public function getById($id): JsonResponse {
         $condominio = $this->repository->getById($id);
         return response()->json($condominio);
     }
 
-    public function save(Request $request) {
+    public function save(Request $request): JsonResponse {
         $data = $request->all();
-        $this->validateFields($fields, $this->rules);
+        $this->validateFields($data, $this->rules);
 
         $condominio = $this->repository->save($data);
+
+        return response()->json($condominio);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id): JsonResponse {
         $data = $request->all();
         $this->validateFields($fields, $this->rules);
 
@@ -53,7 +64,7 @@ class CondominioController extends Controller implements GetAllInterface,
         return response()->json($condominio);
     }
 
-    public function deleteById(Request $request, int $id) {
+    public function delete(Request $request, $id): JsonResponse {
         $condominio = $this->repository->deleteById($id);
         if ($condominio) {
             return response()->json($condominio);
