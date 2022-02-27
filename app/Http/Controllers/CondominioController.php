@@ -31,7 +31,9 @@ class CondominioController extends Controller implements GetAllInterface,
         'valoragua'=> 'required|numeric',
         'valorsalaofestas'=> 'required|numeric',
         'valorlimpezasalaofestas'=> 'required|numeric',
-        'valormudanca'=> 'required|numeric'
+        'valormudanca'=> 'required|numeric',
+        'taxaboleto'=> 'required|numeric',
+        'taxabasicaagua'=> 'required|numeric',
     ];
 
     public function __construct(CondominioRepository $repository, Validator $validator, CNPJValidator $cnpjValidator) {
