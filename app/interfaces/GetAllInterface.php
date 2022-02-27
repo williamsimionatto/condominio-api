@@ -7,4 +7,5 @@ use Illuminate\Http\JsonResponse;
 
 interface GetAllInterface {
     public function getAll(): JsonResponse;
+    
 }
