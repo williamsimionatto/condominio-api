@@ -65,7 +65,7 @@ class CondominioController extends Controller implements GetAllInterface,
 
     public function update(Request $request, $id): JsonResponse {
         $data = $request->all();
-        $this->validateFields($fields, $this->rules);
+        $this->validateFields($data, $this->rules);
 
         if (!$this->cnpjValidator->isValid($data['cnpj'])) {
             return response()->json(['message' => 'CNPJ inválido'], 500);
