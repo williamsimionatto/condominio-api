@@ -71,7 +71,7 @@ class CondominioController extends Controller implements GetAllInterface,
             return response()->json(['message' => 'CNPJ inválido'], 500);
         }
 
-        $condominio = $this->repository->update($data, $id);
+        $condominio = $this->repository->update($id, $data);
 
         return response()->json($condominio);
     }
