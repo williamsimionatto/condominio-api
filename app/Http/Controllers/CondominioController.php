@@ -31,7 +31,9 @@ class CondominioController extends Controller implements GetAllInterface,
         'valoragua'=> 'required|numeric',
         'valorsalaofestas'=> 'required|numeric',
         'valorlimpezasalaofestas'=> 'required|numeric',
-        'valormudanca'=> 'required|numeric'
+        'valormudanca'=> 'required|numeric',
+        'taxaboleto'=> 'required|numeric',
+        'taxabasicaagua'=> 'required|numeric',
     ];
 
     public function __construct(CondominioRepository $repository, Validator $validator, CNPJValidator $cnpjValidator) {
@@ -65,13 +67,13 @@ class CondominioController extends Controller implements GetAllInterface,
 
     public function update(Request $request, $id): JsonResponse {
         $data = $request->all();
-        $this->validateFields($fields, $this->rules);
+        $this->validateFields($data, $this->rules);
 
         if (!$this->cnpjValidator->isValid($data['cnpj'])) {
             return response()->json(['message' => 'CNPJ inválido'], 500);
         }
 
-        $condominio = $this->repository->update($data, $id);
+        $condominio = $this->repository->update($id, $data);
 
         return response()->json($condominio);
     }
