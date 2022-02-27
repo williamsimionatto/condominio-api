@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilPermissaoController;
 use App\Http\Controllers\PermissaoController;
@@ -8,17 +9,6 @@ use App\Http\Controllers\UserController;
 use App\Models\PerfilPermissao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::post('auth/login', [AuthController::class, 'login']);
 
@@ -29,15 +19,12 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::get('refresh', [AuthController::class, 'refresh']);
     });
 
-    Route::group(['prefix'=>'user', 'where'=>['id'=>'[0-9]+']], function() {
-        Route::any('', [UserController::class, 'getAll']);
-        Route::get('/', [UserController::class, 'getAll']);
-        Route::get('/{id}', [UserController::class, 'getById']);
-        Route::post('/', [UserController::class, 'save']);
-        Route::put('/refreshpassword/{id}', [UserController::class, 'refreshPassword']);
-        Route::put('/verifypassword/{id}', [UserController::class, 'verifyPassword']);
-        Route::put('/{id}', [UserController::class, 'update']);
-        Route::delete('/{id}', [UserController::class, 'delete']);
+    Route::group(['prefix'=>'condominio', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::get('', [CondominioController::class, 'getAll']);
+        Route::get('{id}', [CondominioController::class, 'getById']);
+        Route::post('', [CondominioController::class, 'save']);
+        Route::put('{id}', [CondominioController::class, 'update']);
+        Route::delete('{id}', [CondominioController::class, 'delete']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
@@ -61,5 +48,16 @@ Route::group(['middleware'=>'apiJWT'], function() {
     Route::group(['prefix'=>'perfilpermissao', 'where'=>['id'=>'[0-9]+']], function() {
         Route::get('/{id}', [PerfilPermissaoController::class, 'getPermissoesByPerfil']);
         Route::post('/', [PerfilPermissaoController::class, 'save']);
+    });
+
+    Route::group(['prefix'=>'user', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::any('', [UserController::class, 'getAll']);
+        Route::get('/', [UserController::class, 'getAll']);
+        Route::get('/{id}', [UserController::class, 'getById']);
+        Route::post('/', [UserController::class, 'save']);
+        Route::put('/refreshpassword/{id}', [UserController::class, 'refreshPassword']);
+        Route::put('/verifypassword/{id}', [UserController::class, 'verifyPassword']);
+        Route::put('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'delete']);
     });
 });

@@ -2,30 +2,18 @@
 
 namespace App\Providers;
 
-use App\Helpers\Validator;
+use App\Validator\CNPJValidator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
-class AppServiceProvider extends ServiceProvider
-{
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
+class AppServiceProvider extends ServiceProvider {
+    public function register() {
         $this->app->register(RepositoryServiceProvider::class);
         $this->app->register(ValidatorServiceProvider::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
+    public function boot() {
         Schema::defaultStringLength(191);
     }
 }
