@@ -66,10 +66,10 @@ class CondominoController extends Controller implements GetAllInterface,
         return response('', 404)->json('');
     }
 
-    private function validateFields($data, $rules) {
-        $validator = $this->validator->make($data, $rules);
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->all()], 500);
+    private function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            return response(['errors'=>$isValid['errors']], 422);
         }
     }
 }
