@@ -9,6 +9,7 @@ use App\Interfaces\SaveInterface;
 use App\Interfaces\UpdateInterface;
 use App\Repository\Eloquent\CondominoRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class CondominoController extends Controller implements GetAllInterface,
                                                         GetByIdInterface,
@@ -33,12 +34,12 @@ class CondominoController extends Controller implements GetAllInterface,
     }
 
     public function getAll(): JsonResponse {
-        $condominios = Condominio::all();
+        $condominios = $this->repository->getAll();
         return response()->json($condominios);
     }
 
     public function getById($id): JsonResponse {
-        $condominio = Condominio::find($id);
+        $condominio = $this->repository->getById($id);
         return response()->json($condominio);
     }
 
