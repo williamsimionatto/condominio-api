@@ -15,4 +15,8 @@ class CondominoRepository extends BaseRepository implements CondominoRepositoryI
     public function model() {
         return Condomino::class;
     }
+
+    public function save($data): Condomino {
+        return $this->model->firstOrCreate($data);
+    }
 }

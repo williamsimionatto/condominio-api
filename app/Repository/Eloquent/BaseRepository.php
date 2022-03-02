@@ -25,12 +25,12 @@ class BaseRepository implements EloquentRepositoryInterface {
     }
 
     public function save($data) {
-        return $this->model::updateOrCreate($data);
+        return $this->model::create($data);
     }
 
     public function update($id, $data) {
         $model = $this->model::find($id);
-        $model->updateOrCreate($data);
+        $model->update($data);
         return $model;
     }
 
