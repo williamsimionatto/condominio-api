@@ -17,6 +17,12 @@ class CondominoRepository extends BaseRepository implements CondominoRepositoryI
     }
 
     public function save($data): Condomino {
-        return $this->model->firstOrCreate($data);
+        $condomino = $this->model->getById($data['id']);
+
+        if (!$condomino) {
+            $condomino = $this->model->create($data);
+        } else {
+            $condomino->update($data);
+        }
     }
 }
