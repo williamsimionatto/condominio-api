@@ -11,7 +11,7 @@ class Condomino extends Model {
 
     protected $fillable = [
         'apartamento',
-        'condomino',
+        'condominio',
         'name',
         'cpf',
         'sindico',
