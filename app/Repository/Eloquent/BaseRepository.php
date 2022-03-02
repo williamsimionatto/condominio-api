@@ -30,7 +30,7 @@ class BaseRepository implements EloquentRepositoryInterface {
 
     public function update($id, $data) {
         $model = $this->model::find($id);
-        $model->update($data);
+        $model->updateOrCreate($data);
         return $model;
     }
 
