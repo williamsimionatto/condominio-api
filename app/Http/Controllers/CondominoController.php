@@ -10,6 +10,7 @@ use App\Interfaces\UpdateInterface;
 use App\Repository\Eloquent\CondominoRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Helpers\Validator;
 
 class CondominoController extends Controller implements GetAllInterface,
                                                         GetByIdInterface,
