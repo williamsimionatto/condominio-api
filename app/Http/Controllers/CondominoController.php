@@ -47,7 +47,7 @@ class CondominoController extends Controller implements GetAllInterface,
     public function save(Request $request): JsonResponse {
         $data = $request->all();
         $this->validateFields($data, $this->rules);
-        $data->sindico = $data->sindico ? 'S' : 'N';
+        $data->sindico = $data['sindico'] ? 'S' : 'N';
 
         $condominio = $this->repository->save($data);
         return response()->json($condominio);
