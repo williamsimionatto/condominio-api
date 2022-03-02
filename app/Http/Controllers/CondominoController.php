@@ -56,7 +56,7 @@ class CondominoController extends Controller implements GetAllInterface,
     public function update(Request $request, $id): JsonResponse {
         $data = $request->all();
         $this->validateFields($data, $this->rules);
-        $data->sindico = $data->sindico ? 'S' : 'N';
+        $data['sindico'] = $data['sindico'] ? 'S' : 'N';
 
         $condominio = $this->repository->update($id, $data);
         return response()->json($condominio);
