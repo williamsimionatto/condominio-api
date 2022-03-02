@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CondominioController;
+use App\Http\Controllers\CondominoController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilPermissaoController;
 use App\Http\Controllers\PermissaoController;
@@ -25,6 +26,13 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::post('', [CondominioController::class, 'save']);
         Route::put('{id}', [CondominioController::class, 'update']);
         Route::delete('{id}', [CondominioController::class, 'delete']);
+    });
+
+    Route::group(['prefix'=>'condomino', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::get('', [CondominoController::class, 'getAll']);
+        Route::get('{id}', [CondominoController::class, 'getById']);
+        Route::post('', [CondominoController::class, 'save']);
+        Route::put('{id}', [CondominoController::class, 'update']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
