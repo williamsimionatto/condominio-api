@@ -17,7 +17,7 @@ class CreateCondominoTable extends Migration
             $table->id();
             $table->bigInteger('condominio')->unsigned();
             $table->bigInteger('apartamento');
-            $table->string('nome');
+            $table->string('name');
             $table->string('cpf');
             $table->string('sindico', 1)->default('N');
             $table->string('tipo', 1)->default('A');
