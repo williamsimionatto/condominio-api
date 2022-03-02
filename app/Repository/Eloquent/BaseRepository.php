@@ -25,7 +25,7 @@ class BaseRepository implements EloquentRepositoryInterface {
     }
 
     public function save($data) {
-        return $this->model::create($data);
+        return $this->model::updateOrCreate($data);
     }
 
     public function update($id, $data) {
