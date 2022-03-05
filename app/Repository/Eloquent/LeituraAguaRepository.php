@@ -18,6 +18,6 @@ class LeituraAguaRepository extends BaseRepository implements LeituraAguaReposit
 
     public function getByCondominio($id): JsonResponse {
         $leituras = $this->model->where('condominio', $id)->get();
-        return response()->json($leituras);
+        return $leituras;
     }
 }
