@@ -30,7 +30,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
 
     Route::group(['prefix'=>'condomino', 'where'=>['id'=>'[0-9]+']], function() {
         Route::get('', [CondominoController::class, 'getAll']);
-        Route::get('{id}', [CondominoController::class, 'getById']);
+        Route::get('{id}', [CondominoController::class, 'getByCondomino']);
         Route::post('', [CondominoController::class, 'save']);
         Route::put('{id}', [CondominoController::class, 'update']);
     });
