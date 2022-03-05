@@ -61,9 +61,13 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         return response()->json($leitura);
     }
 
-    public function delete($id): JsonResponse {
-        $this->repository->delete($id);
-        return response()->json(['message' => 'Leitura de água deletada com sucesso']);
+    public function delete(Request $request, $id): JsonResponse {
+        $condominio = $this->repository->delete($id);
+        if ($condominio) {
+            return response()->json($condominio);
+        }
+
+        return response()->json(['message' => 'Não foi possível excluir este condomínio'], 500);
     }
 
     private function validateFields(Array $data, Array $rules) {
