@@ -32,6 +32,8 @@ class UserController extends Controller {
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:6|confirmed',
+                'perfil_id' => 'required|integer',
+                'cpf' => 'required|string|max:14|',
             ];
         
         $this->validateFields($data, $rules);
@@ -44,7 +46,8 @@ class UserController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $fields = $request->only('name', 'email', 'active', 'perfil_id');
+        $fields = $request->only('name', 'email', 'active', 'perfil_id', 'cpf');
+
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255'

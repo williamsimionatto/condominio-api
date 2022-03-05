@@ -20,7 +20,9 @@ class LeituraAguaValores extends Model {
         'valoragua',
         'valorsalaofestas',
         'valorlimpezasalaofestas',
-        'valormudanca'
+        'valormudanca',
+        'taxaboleto',
+        'taxabasicaagua'
     ];
 
     public function leituraAgua() {
