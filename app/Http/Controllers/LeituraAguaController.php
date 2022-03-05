@@ -9,6 +9,7 @@ use App\Interfaces\GetByIdInterface;
 use App\Interfaces\SaveInterface;
 use App\Interfaces\UpdateInterface;
 use App\Repository\Eloquent\LeituraAguaRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LeituraAguaController extends Controller implements GetAllInterface,
