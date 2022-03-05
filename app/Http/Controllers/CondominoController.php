@@ -13,7 +13,6 @@ use Illuminate\Http\JsonResponse;
 use App\Helpers\Validator;
 
 class CondominoController extends Controller implements GetAllInterface,
-                                                        GetByIdInterface,
                                                         SaveInterface,
                                                         UpdateInterface,
                                                         DeleteInterface {
@@ -40,8 +39,8 @@ class CondominoController extends Controller implements GetAllInterface,
         return response()->json($condominios);
     }
 
-    public function getById($id): JsonResponse {
-        $condominio = $this->repository->getById($id);
+    public function getByCondomino($id): JsonResponse {
+        $condominio = $this->repository->getbyCondominio($id);
         return response()->json($condominio);
     }
 

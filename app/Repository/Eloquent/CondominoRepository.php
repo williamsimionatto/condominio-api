@@ -16,6 +16,10 @@ class CondominoRepository extends BaseRepository implements CondominoRepositoryI
         return Condomino::class;
     }
 
+    public function getbyCondominio($id) {
+        return $this->model->where('condominio', $id)->get();
+    }
+
     public function save($data): Condomino {
         $condomino = $this->model->find($data['id']);
 
