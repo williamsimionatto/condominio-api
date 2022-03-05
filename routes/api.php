@@ -49,8 +49,6 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::get('/', [PermissaoController::class, 'getAll']);
         Route::get('/{id}', [PermissaoController::class, 'getById']);
         Route::post('/', [PermissaoController::class, 'save']);
-        Route::put('/{id}', [PermissaoController::class, 'update']);
-        Route::delete('/{id}', [PermissaoController::class, 'delete']);
     });
 
     Route::group(['prefix'=>'perfilpermissao', 'where'=>['id'=>'[0-9]+']], function() {
