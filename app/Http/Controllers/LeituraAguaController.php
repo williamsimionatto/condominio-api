@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Validator;
 use App\Interfaces\DeleteInterface;
 use App\Interfaces\GetAllInterface;
 use App\Interfaces\GetByIdInterface;
 use App\Interfaces\SaveInterface;
 use App\Interfaces\UpdateInterface;
+use App\Repository\Eloquent\LeituraAguaRepository;
 use Illuminate\Http\Request;
 
 class LeituraAguaController extends Controller implements GetAllInterface,
@@ -36,6 +38,11 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     public function getById($id): JsonResponse {
         $leitura = $this->repository->getById($id);
         return response()->json($leitura);
+    }
+
+    public function getByCondominio($id): JsonResponse {
+        $leituras = $this->repository->getByCondominio($id);
+        return response()->json($leituras);
     }
 
     public function save(Request $request): JsonResponse {
