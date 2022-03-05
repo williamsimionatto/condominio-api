@@ -16,6 +16,12 @@ class LeituraAguaRepository extends BaseRepository implements LeituraAguaReposit
         return LeituraAgua::class;
     }
 
+    public function getAll() {
+        return $this->model->join('condominio', 'condominio.id', '=', 'leitura_agua.condominio')
+            ->select('leitura_agua.*', 'condominio.name as condominio')
+            ->get();
+    }
+
     public function getByCondominio($id) {
         $leituras = $this->model->where('condominio', $id)->get();
         return $leituras;
