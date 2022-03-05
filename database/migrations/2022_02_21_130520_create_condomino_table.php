@@ -16,15 +16,16 @@ class CreateCondominoTable extends Migration
         Schema::create('condomino', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('condominio')->unsigned();
-            $table->bigInteger('apartamento');
+            $table->string('apartamento');
             $table->string('name');
             $table->string('cpf');
+            $table->integer('numeroquartos');
             $table->string('sindico', 1)->default('N');
             $table->string('tipo', 1)->default('A');
-            $table->integer('numeroquartos');
+            $table->string('ativo', 1)->default('S');
             $table->timestamps();
 
-            $table->unique(['apartamento', 'condominio']);
+            $table->unique(['apartamento', 'condominio', 'cpf', 'ativo']);
         });
 
         Schema::table('condomino', function (Blueprint $table) {

@@ -11,6 +11,7 @@ class PerfilController extends Controller {
     private $validator;
     private $rules = [
         'name' => 'required|string|max:255',
+        'sigla' => 'required|string|max:5',
     ];
 
     public function __construct(PerfilRepository $repository, Validator $validator) {

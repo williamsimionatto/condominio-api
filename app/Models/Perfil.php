@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Perfil extends Model {
     use HasFactory;
     protected $table = "perfil";
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'sigla'];
 
     public function users() {
         return $this->hasMany(User::class, 'perfil_id');

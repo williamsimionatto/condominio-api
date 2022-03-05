@@ -14,9 +14,10 @@ class Condomino extends Model {
         'condominio',
         'name',
         'cpf',
+        'numeroquartos',
         'sindico',
         'tipo',
-        'numeroquartos'
+        'ativo',
     ];
 
     public function leituraAgua() {

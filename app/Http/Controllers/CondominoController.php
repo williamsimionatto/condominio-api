@@ -26,7 +26,8 @@ class CondominoController extends Controller implements GetAllInterface,
         'tipo' => 'required|string|max:1',
         'numeroquartos' => 'required|integer',
         'apartamento' => 'required|integer|string',
-        'condominio' => 'required|integer'
+        'condominio' => 'required|integer',
+        'ativo' => 'required|string|max:1',
     ];
 
     public function __construct(CondominoRepository $repository, Validator $validator) {
