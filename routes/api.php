@@ -45,6 +45,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::put('{id}', [LeituraAguaController::class, 'update']);
         Route::delete('{id}', [LeituraAguaController::class, 'delete']);
         Route::post('valores', [LeituraAguaValoresController::class, 'getCondominos']);
+        Route::post('condomino/valores', [LeituraAguaValoresController::class, 'getValoresCondominos']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
