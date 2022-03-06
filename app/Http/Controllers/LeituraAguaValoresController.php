@@ -72,7 +72,7 @@ class LeituraAguaValoresController extends Controller {
                         WHEN c.tipo = 'A' AND c.numeroquartos = 3 THEN co.condominio3quartos
                         WHEN c.tipo = 'A' AND c.numeroquartos = 2 THEN co.condominio2quartos 
                         WHEN c.tipo = 'S' THEN co.condominiosalacomercial 
-                        END valorcondominio, sub.consumo AS consumoAnterior, lav.consumo AS consumoAtual, lav.consumo - sub.consumo AS consumo,
+                        END valorcondominio, sub.consumo AS consumoAnterior, lav.consumo AS consumoAtual, sub.consumo - lav.consumo AS consumo,
                         co.valoragua, lav.valorsalaofestas, lav.valorlimpezasalaofestas, lav.valormudanca, co.taxaboleto, 
                         co.taxabasicaagua, 0 total, c.id  AS condominoId
                 FROM leitura_agua la
