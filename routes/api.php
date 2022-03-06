@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\CondominoController;
 use App\Http\Controllers\LeituraAguaController;
+use App\Http\Controllers\LeituraAguaValoresController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilPermissaoController;
 use App\Http\Controllers\PermissaoController;
@@ -43,6 +44,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::post('', [LeituraAguaController::class, 'save']);
         Route::put('{id}', [LeituraAguaController::class, 'update']);
         Route::delete('{id}', [LeituraAguaController::class, 'delete']);
+        Route::post('valores', [LeituraAguaValoresController::class, 'getCondominos']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
