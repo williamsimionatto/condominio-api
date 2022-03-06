@@ -12,6 +12,7 @@ class LeituraAguaValoresController extends Controller {
 
     public function save(Request $request) {
         $data = $request->all();
+        $data['leitura_agua'] = $data['leituraagua'];
         $result = LeituraAguaValores::create($data);
 
         return response()->json($result);
