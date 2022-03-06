@@ -20,7 +20,7 @@ class LeituraAguaValoresController extends Controller {
                         WHEN c.tipo = 'A' AND c.numeroquartos = 2 THEN co.condominio2quartos 
                         WHEN c.tipo = 'S' THEN co.condominiosalacomercial 
                     END valorcondominio, COALESCE(sub.consumo, 0) AS consumoAnterior, COALESCE(sub.consumo, 0) AS consumoAtual, 0 consumo,
-                    co.valoragua, co.valorsalaofestas, co.valorlimpezasalaofestas, co.valormudanca, co.taxaboleto, 
+                    co.valoragua, 0 valorsalaofestas, 0 valorlimpezasalaofestas, 0 valormudanca, co.taxaboleto, 
                     co.taxabasicaagua, 0 total
             FROM condomino c
             LEFT JOIN condominio co ON co.id = c.condominio
