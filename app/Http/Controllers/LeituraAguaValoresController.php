@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LeituraAguaValores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class LeituraAguaValoresController extends Controller {
     public function __construct() {
         
+    }
+
+    public function save(Request $request) {
+        $data = $request->all();
+        $result = LeituraAguaValores::create($data);
+
+        return response()->json($result);
     }
 
     public function getCondominos(Request $request) {
