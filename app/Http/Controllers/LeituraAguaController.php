@@ -58,7 +58,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         $data = $request->all();
         $this->validateFields($data, $this->rules);
 
-        $leitura = $this->repository->update($data, $id);
+        $leitura = $this->repository->update($id, $data);
         return response()->json($leitura);
     }
 
