@@ -91,7 +91,7 @@ class LeituraAguaValoresController extends Controller {
                 'dataLeitura' => $data['dataLeitura']
             ],
             [
-                'idLeitura' => $data['idLeitura'],
+                'idLeitura' => 'int',
                 'dataLeitura' => 'date'
             ]
         );
