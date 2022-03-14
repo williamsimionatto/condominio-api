@@ -14,6 +14,10 @@ class LeituraAguaValores extends Model {
         'leitura_agua',
         'condomino',
         'consumo',
+        'valorcondominio',
+        'qtdusosalao',
+        'qtdlimpezasalao',
+        'qtdmudanca',
     ];
 
     public function leituraAgua() {
