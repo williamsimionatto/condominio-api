@@ -10,7 +10,6 @@ class HistoricoValoresCondominio extends Model {
     protected $table = "historico_valores_condominios";
 
     protected $fillable = [
-        'condominio',
         'leitura',
         'condominio2quartos',
         'condominio3quartos',
@@ -20,10 +19,6 @@ class HistoricoValoresCondominio extends Model {
         'valorlimpezasalaofestas',
         'valormudanca',
     ];
-
-    public function condominio() {
-        return $this->belongsTo(Condominio::class, 'condominio');
-    }
 
     public function leitura() {
         return $this->belongsTo(LeituraAgua::class, 'leitura');

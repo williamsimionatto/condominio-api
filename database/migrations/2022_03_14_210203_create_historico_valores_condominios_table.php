@@ -14,7 +14,6 @@ class CreateHistoricoValoresCondominiosTable extends Migration
     public function up() {
         Schema::create('historico_valores_condominios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('condominio');
             $table->unsignedBigInteger('leitura');
             $table->double('condominio2quartos');
             $table->double('condominio3quartos');
@@ -24,10 +23,6 @@ class CreateHistoricoValoresCondominiosTable extends Migration
             $table->double('valorlimpezasalaofestas');
             $table->double('valormudanca');
             $table->timestamps();
-        });
-
-        Schema::table('historico_valores_condominios', function (Blueprint $table) {
-            $table->foreign('leitura')->references('id')->on('condominio');
         });
 
         Schema::table('historico_valores_condominios', function (Blueprint $table) {
