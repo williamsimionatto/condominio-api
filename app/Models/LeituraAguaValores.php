@@ -14,15 +14,6 @@ class LeituraAguaValores extends Model {
         'leitura_agua',
         'condomino',
         'consumo',
-        'condominio2quartos',
-        'condominio3quartos',
-        'condominiosalacomercial',
-        'valoragua',
-        'valorsalaofestas',
-        'valorlimpezasalaofestas',
-        'valormudanca',
-        'taxaboleto',
-        'taxabasicaagua'
     ];
 
     public function leituraAgua() {
