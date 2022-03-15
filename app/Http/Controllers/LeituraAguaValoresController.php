@@ -61,38 +61,42 @@ class LeituraAguaValoresController extends Controller {
     }
 
     public function getValoresCondominos(Request $request) {
-        $data = $request->all();
-        $results = [];
-        // $results = DB::select(
-        //         "SELECT la.id, lav.leitura_agua AS leituraagua,
-        //             CONCAT(c.apartamento , '- ', c.name) AS condomino,
-        //             CASE WHEN c.sindico = 'S' THEN 0.00
-        //                 WHEN c.tipo = 'A' AND c.numeroquartos = 3 THEN co.condominio3quartos
-        //                 WHEN c.tipo = 'A' AND c.numeroquartos = 2 THEN co.condominio2quartos 
-        //                 WHEN c.tipo = 'S' THEN co.condominiosalacomercial 
-        //                 END valorcondominio, COALESCE(sub.consumo, 0) AS consumoAnterior, lav.consumo AS consumoAtual, ABS(lav.consumo - COALESCE(sub.consumo, 0)) AS consumo,
-        //                 co.valoragua, lav.valorsalaofestas, lav.valorlimpezasalaofestas, lav.valormudanca, co.taxaboleto, 
-        //                 co.taxabasicaagua, 0 total, c.id  AS condominoId
-        //         FROM leitura_agua la
-        //         JOIN leitura_agua_valores lav ON la.id = lav.leitura_agua
-        //         JOIN condomino c ON c.id = lav.condomino 
-        //         JOIN condominio co ON co.id = la.condominio
-        //         LEFT JOIN (
-        //             SELECT lav.*
-        //             FROM leitura_agua_valores lav
-        //             JOIN leitura_agua la ON lav.leitura_agua  = la.id
-        //             WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
-        //         ) AS sub ON sub.condomino = c.id
-        //         WHERE lav.leitura_agua = :idLeitura",
-        //     [
-        //         'idLeitura' => $data['idLeitura'],
-        //         'dataLeitura' => $data['dataLeitura']
-        //     ],
-        //     [
-        //         'idLeitura' => 'int',
-        //         'dataLeitura' => 'date'
-        //     ]
-        // );
+        $date = $request->get('date', date('Y-m-d'));
+        $idLeitura = $request->get('id', 0);
+
+        $results = DB::select(
+                "SELECT la.id, lav.leitura_agua AS leituraagua,
+                        c.id AS condominoId,
+                        CONCAT(c.apartamento, ' - ', c.name)	AS condomino,
+                        CASE WHEN c.sindico = 'S' THEN 0.00
+                            WHEN c.tipo = 'A' AND c.numeroquartos = 3 THEN hvc.condominio3quartos 
+                            WHEN c.tipo = 'A' AND c.numeroquartos = 2 THEN hvc.condominio2quartos 
+                            WHEN c.tipo = 'S' THEN hvc.condominiosalacomercial 
+                        END valorcondominio,
+                        COALESCE(sub.consumo, 0) AS consumoAnterior, lav.consumo AS consumoAtual,
+                        ABS(lav.consumo - COALESCE(sub.consumo, 0)) AS consumo, 
+                        lav.qtdusosalao, lav.qtdlimpezasalao, lav.qtdmudanca,
+                        hvc.valoragua, hvc.taxaboleto, hvc.taxabasicaagua, 0 AS total
+                FROM leitura_agua la
+                JOIN leitura_agua_valores lav ON la.id = lav.leitura_agua
+                JOIN historico_valores_condominios hvc ON hvc.leitura = la.id
+                JOIN condomino c ON lav.condomino = c.id
+                LEFT JOIN (
+                    SELECT lav.*
+                    FROM leitura_agua_valores lav
+                    JOIN leitura_agua la ON lav.leitura_agua  = la.id
+                    WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
+                ) AS sub ON sub.condomino = lav.condomino
+                WHERE lav.leitura_agua = :idLeitura",
+            [
+                'idLeitura' => $idLeitura,
+                'dataLeitura' => $date
+            ],
+            [
+                'idLeitura' => 'int',
+                'dataLeitura' => 'date'
+            ]
+        );
 
         return response()->json($results);
     }
