@@ -25,6 +25,21 @@ class LeituraAguaValoresController extends Controller {
         return response()->json($result);
     }
 
+    public function update(Request $request, $id) {
+        $data = $request->all();
+        $data['leitura_agua'] = $data['leituraagua'];
+        $condominio = Condominio::find($data['condominio']);
+
+        $data['condomino'] = $data['condominoId'];
+        $data['consumo'] = $data['consumo'];
+        $data['qtdusosalao'] = $data['qtdusosalao'];
+        $data['qtdlimpezasalao'] = $data['qtdlimpezasalao'];
+        $data['qtdmudanca'] = $data['qtdmudanca'];
+
+        $result = LeituraAguaValores::find($id)->update($data);
+        return response()->json($result);
+    }
+
     public function getCondominos(Request $request) {
         $date = $request->get('date', date('Y-m-d'));
 
