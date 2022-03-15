@@ -26,42 +26,43 @@ class LeituraAguaValoresController extends Controller {
     }
 
     public function getCondominos(Request $request) {
-        $data = $request->all();
-        $results = [];
+        $date = $request->get('date', date('Y-m-d'));
 
-        // $results = DB::select(
-        //     "SELECT '' AS id, '' AS leituraagua,
-        //             CONCAT(c.apartamento , '- ', c.name) AS condomino,
-        //             CASE WHEN c.sindico = 'S' THEN 0.00
-        //                 WHEN c.tipo = 'A' AND c.numeroquartos = 3 THEN co.condominio3quartos
-        //                 WHEN c.tipo = 'A' AND c.numeroquartos = 2 THEN co.condominio2quartos 
-        //                 WHEN c.tipo = 'S' THEN co.condominiosalacomercial 
-        //             END valorcondominio, COALESCE(sub.consumo, 0) AS consumoAnterior, COALESCE(sub.consumo, 0) AS consumoAtual, 0 consumo,
-        //             co.valoragua, 0 valorsalaofestas, 0 valorlimpezasalaofestas, 0 valormudanca, co.taxaboleto, 
-        //             co.taxabasicaagua, 0 total, c.id  AS condominoId
-        //     FROM condomino c
-        //     LEFT JOIN condominio co ON co.id = c.condominio
-        //     LEFT JOIN (
-        //         SELECT lav.*
-        //         FROM leitura_agua_valores lav
-        //         JOIN leitura_agua la ON lav.leitura_agua  = la.id
-        //         WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
-        //     ) AS sub ON sub.condomino = c.id
-        //     WHERE c.ativo = 'S'",
-        //     [
-        //         'dataLeitura' => $data['dataLeitura']
-        //     ],
-        //     [
-        //         'dataLeitura' => 'date'
-        //     ]
-        // );
+        $results = DB::select(
+            "SELECT '' AS id, '' AS leituraagua,
+                    CONCAT(c.apartamento, ' - ', c.name) as condomino,
+                    CASE WHEN c.sindico = 'S' THEN 0.00
+                        WHEN c.tipo = 'A' AND c.numeroquartos = 3 THEN co.condominio3quartos
+                        WHEN c.tipo = 'A' AND c.numeroquartos = 2 THEN co.condominio2quartos 
+                        WHEN c.tipo = 'S' THEN co.condominiosalacomercial
+                    END valorcondominio,
+                    COALESCE(sub.consumo, 0) AS consumoAnterior, COALESCE(sub.consumo, 0) AS consumoAtual, 
+                    0 consumo, 0 AS qtdusosalao, 0 AS qtlimpezasalao, 0 qtdmundanca        
+            FROM condomino c
+            JOIN condominio co ON c.condominio = co.id
+            LEFT JOIN (
+                SELECT lav.*
+                FROM leitura_agua_valores lav
+                JOIN leitura_agua la ON lav.leitura_agua  = la.id
+                WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
+            ) AS sub ON sub.condomino = c.id
+            WHERE c.ativo = :flAtivo",
+            [
+                'dataLeitura' => $date,
+                'flAtivo' => 'S'
+            ],
+            [
+                'dataLeitura' => 'date',
+                'flAtivo' => 'string'
+            ]
+        );
 
         return response()->json($results);
     }
 
     public function getValoresCondominos(Request $request) {
         $data = $request->all();
-        $result = [];
+        $results = [];
         // $results = DB::select(
         //         "SELECT la.id, lav.leitura_agua AS leituraagua,
         //             CONCAT(c.apartamento , '- ', c.name) AS condomino,
