@@ -47,7 +47,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::get('condominos', [LeituraAguaValoresController::class, 'getCondominos']);
         Route::get('condominos/valores', [LeituraAguaValoresController::class, 'getValoresCondominos']);
         Route::post('condominos/valores', [LeituraAguaValoresController::class, 'save']);
-        Route::update('condominos/valores/{id}', [LeituraAguaValoresController::class, 'update']);
+        Route::put('condominos/valores/{id}', [LeituraAguaValoresController::class, 'update']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
