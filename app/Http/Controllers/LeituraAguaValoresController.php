@@ -26,18 +26,28 @@ class LeituraAguaValoresController extends Controller {
     }
 
     public function update(Request $request, $id) {
+        $update = [];
         $data = $request->all();
-        $data['leitura_agua'] = $data['leituraagua'];
+        $update['leitura_agua'] = $data['leituraagua'];
         $condominio = Condominio::find($data['condominio']);
 
-        $data['condomino'] = $data['condominoId'];
-        $data['consumo'] = $data['consumo'];
-        $data['qtdusosalao'] = $data['qtdusosalao'];
-        $data['qtdlimpezasalao'] = $data['qtdlimpezasalao'];
-        $data['qtdmudanca'] = $data['qtdmudanca'];
+        $update['condomino'] = $data['condominoId'];
+        $update['consumo'] = $data['consumo'];
+        $update['qtdusosalao'] = $data['qtdusosalao'];
+        $update['qtdlimpezasalao'] = $data['qtdlimpezasalao'];
+        $update['qtdmudanca'] = $data['qtdmudanca'];
 
-        $result = LeituraAguaValores::find($id)->update($data);
-        return response()->json($result);
+        $leitura = LeituraAguaValores::where([
+            'leitura_agua' => $update['leitura_agua'],
+            'condomino' => $update['condomino']
+        ]);
+
+        if ($leitura->count() > 0) {
+            $leitura->update($update);
+            return response()->json($leitura);
+        }
+
+        return response(204);
     }
 
     public function getCondominos(Request $request) {
@@ -52,7 +62,7 @@ class LeituraAguaValoresController extends Controller {
                         WHEN c.tipo = 'S' THEN co.condominiosalacomercial
                     END valorcondominio,
                     COALESCE(sub.consumo, 0) AS consumoAnterior, COALESCE(sub.consumo, 0) AS consumoAtual, 
-                    0 consumo, 0 AS qtdusosalao, 0 AS qtlimpezasalao, 0 qtdmundanca        
+                    0 consumo, 0 AS qtdusosalao, 0 AS qtdlimpezasalao, 0 qtdmudanca, c.id as condominoId      
             FROM condomino c
             JOIN condominio co ON c.condominio = co.id
             LEFT JOIN (
@@ -91,7 +101,8 @@ class LeituraAguaValoresController extends Controller {
                         COALESCE(sub.consumo, 0) AS consumoAnterior, lav.consumo AS consumoAtual,
                         ABS(lav.consumo - COALESCE(sub.consumo, 0)) AS consumo, 
                         lav.qtdusosalao, lav.qtdlimpezasalao, lav.qtdmudanca,
-                        hvc.valoragua, hvc.taxaboleto, hvc.taxabasicaagua, 0 AS total
+                        hvc.valoragua, hvc.taxaboleto, hvc.taxabasicaagua, 0 AS total,
+                        c.id as condominoId
                 FROM leitura_agua la
                 JOIN leitura_agua_valores lav ON la.id = lav.leitura_agua
                 JOIN historico_valores_condominios hvc ON hvc.leitura = la.id
