@@ -18,9 +18,6 @@ class LeituraAguaValoresController extends Controller {
         $data['condominio3quartos'] = $condominio->condominio3quartos;
         $data['condominio2quartos'] = $condominio->condominio2quartos;
         $data['condominiosalacomercial'] = $condominio->condominiosalacomercial;
-        // $data['valorsalaofestas'] = $condominio->valorsalaofestas;
-        // $data['valorlimpezasalaofestas'] = $condominio->valorlimpezasalaofestas;
-        // $data['valormudanca'] = $condominio->valormudanca;
         $data['taxaboleto'] = $condominio->taxaboleto;
         $data['taxabasicaagua'] = $condominio->taxabasicaagua;
         $data['valoragua'] = $condominio->valoragua;
