@@ -31,4 +31,8 @@ class CondominoRepository extends BaseRepository implements CondominoRepositoryI
 
         return $condomino;
     }
+
+    public function getSindico() {
+        return $this->model->where('sindico', 'S')->first();
+    }
 }

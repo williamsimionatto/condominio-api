@@ -10,6 +10,7 @@ use App\Interfaces\SaveInterface;
 use App\Interfaces\UpdateInterface;
 use App\Models\HistoricoValoresCondominio;
 use App\Repository\Eloquent\CondominioRepository;
+use App\Repository\Eloquent\CondominoRepository;
 use App\Repository\Eloquent\HistoricoValoresCondominioRepository;
 use App\Repository\Eloquent\LeituraAguaRepository;
 use Illuminate\Http\JsonResponse;
@@ -24,6 +25,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     private $repository;
     private $repositoryHistoricoValores;
     private $repositoryCondominio;
+    private $repositoryCondomino;
     private $validator;
     private $rules = [
         'condominio'=> 'required|numeric',
@@ -34,12 +36,14 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     public function __construct(
         LeituraAguaRepository $repository, Validator $validator,
         HistoricoValoresCondominioRepository $repositoryHistoricoValores,
-        CondominioRepository $repositoryCondominio
+        CondominioRepository $repositoryCondominio,
+        CondominoRepository $repositoryCondomino
     ) {
         $this->repository = $repository;
         $this->validator = $validator;
         $this->repositoryHistoricoValores = $repositoryHistoricoValores;
         $this->repositoryCondominio = $repositoryCondominio;
+        $this->repositoryCondomino = $repositoryCondomino;
     }
 
     public function getAll(): JsonResponse {
@@ -64,6 +68,8 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         $leitura = $this->repository->save($data);
 
         $condominio = $this->repositoryCondominio->getById($data['condominio']);
+        $sindico = $this->repositoryCondomino->getSindico();
+
         $historicoValores = [];
         $historicoValores['leitura'] = $leitura->id;
         $historicoValores['condominio2quartos'] = $condominio->condominio2quartos;
@@ -73,11 +79,11 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         $historicoValores['valorsalaofestas'] = $condominio->valorsalaofestas;
         $historicoValores['valorlimpezasalaofestas'] = $condominio->valorlimpezasalaofestas;
         $historicoValores['valormudanca'] = $condominio->valormudanca;
+        $historicoValores['sindico'] = $sindico->id;
         $historicoValores['taxaboleto'] = $condominio->taxaboleto;
         $historicoValores['taxabasicaagua'] = $condominio->taxabasicaagua;
 
         $this->repositoryHistoricoValores->save($historicoValores);
-
         return response()->json($leitura);
     }
 

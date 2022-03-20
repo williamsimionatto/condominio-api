@@ -19,7 +19,8 @@ class HistoricoValoresCondominio extends Model {
         'valorlimpezasalaofestas',
         'valormudanca',
         'taxaboleto',
-        'taxabasicaagua'
+        'taxabasicaagua',
+        'sindico'
     ];
 
     public function leitura() {
