@@ -80,6 +80,8 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         $historicoValores['valorlimpezasalaofestas'] = $condominio->valorlimpezasalaofestas;
         $historicoValores['valormudanca'] = $condominio->valormudanca;
         $historicoValores['sindico'] = $sindico->id;
+        $historicoValores['taxaboleto'] = $condominio->taxaboleto;
+        $historicoValores['taxabasicaagua'] = $condominio->taxabasicaagua;
 
         $this->repositoryHistoricoValores->save($historicoValores);
         return response()->json($leitura);
