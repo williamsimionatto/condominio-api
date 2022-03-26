@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\PerfilPermissao;
 use App\Models\User;
 use Illuminate\Http\Request;
  
@@ -12,7 +13,9 @@ class AuthController extends Controller {
     public function login(Request $request) {
         $credentials = $request->only(['email', 'password']);
         $token = auth('api')->attempt($credentials);
-        $user = User::where('email', $request->email)->select(['id', 'name', 'email', 'active'])->first();
+        $user = User::where('email', $request->email)->select(['id', 'name', 'email', 'active', 'perfil_id'])->first();
+        $permissions = PerfilPermissao::join('permissao', 'permissao.id', '=', 'perfilpermisao.permissao')->
+                      where('perfil', $user->perfil_id)->select('consultar', 'inserir', 'alterar', 'excluir', 'permissao.sigla')->get();
 
         if (!$token || $user->active === 'N') {
             return response()->json(['error' => 'Credenciais Inválidas'], 401);
@@ -21,6 +24,7 @@ class AuthController extends Controller {
         $response = [
             'access_token' => $token,
             'user' => $user,
+            'permissions' => $permissions
         ];
 
         return $this->respondWithToken($response);
