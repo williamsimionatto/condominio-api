@@ -19,15 +19,17 @@ class PerfilPermissaoRepository extends BaseRepository implements PerfilPermissa
         return PerfilPermissao::class;
     }
 
-    public function getPermissoesByPerfil(Int $idPerfil) {
+    public function getPermissoesByPerfil(Int $idPerfil, $optionsFilters = ['permissao.id', 'permissao.name', 'perfilpermisao.perfil']) {
+        $optionsFilters = !empty($optionsFilters) ? $optionsFilters : [];
 
-        $permissoes = Permissao::select([
-            'permissao.id', 'permissao.name', 'permissao.sigla', 'perfilpermisao.perfil',
-            DB::raw("COALESCE(perfilpermisao.consultar, 'N') AS consultar"),
-            DB::raw("COALESCE(perfilpermisao.inserir, 'N') AS inserir"),
-            DB::raw("COALESCE(perfilpermisao.alterar, 'N') AS alterar"),
-            DB::raw("COALESCE(perfilpermisao.excluir, 'N') AS excluir"),
-            ])
+        $filters = array_merge($optionsFilters,
+                               ['permissao.sigla',
+                                DB::raw("COALESCE(perfilpermisao.consultar, 'N') AS consultar"),
+                                DB::raw("COALESCE(perfilpermisao.inserir, 'N') AS inserir"),
+                                DB::raw("COALESCE(perfilpermisao.alterar, 'N') AS alterar"),
+                                DB::raw("COALESCE(perfilpermisao.excluir, 'N') AS excluir")]);
+
+        $permissoes = Permissao::select($filters)
             ->leftjoin('perfilpermisao', function($join) use ($idPerfil) {
                 $join->on('perfilpermisao.permissao', '=', 'permissao.id')
                     ->where('perfilpermisao.perfil', '=', $idPerfil);
