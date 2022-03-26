@@ -1,25 +1,32 @@
 <?php
+
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\PerfilPermissao;
 use App\Models\User;
 use App\Repository\Eloquent\PerfilPermissaoRepository;
+use App\Repository\Eloquent\UserRepository;
 use Illuminate\Http\Request;
- 
+
 class AuthController extends Controller {
     protected $perfilPermissiaoRepository;
+    protected $userRepository;
 
-    public function __construct(PerfilPermissaoRepository $perfilPermissaoRepository) {
+    public function __construct(
+        PerfilPermissaoRepository $perfilPermissaoRepository,
+        UserRepository $userRepository
+    ) {
         $this->middleware('auth:api', ['except' => ['login']]);
 
-        $this->perfilPermissiaoRepository = $perfilPermissaoRepository; 
+        $this->perfilPermissiaoRepository = $perfilPermissaoRepository;
+        $this->userRepository = $userRepository;
     }
  
     public function login(Request $request) {
         $credentials = $request->only(['email', 'password']);
         $token = auth('api')->attempt($credentials);
-        $user = User::where('email', $request->email)->select(['id', 'name', 'email', 'active', 'perfil_id'])->first();
-    
+        $user = $this->userRepository->getByEmail($request->email);
+
         $permissions = $this->perfilPermissiaoRepository->getPermissoesByPerfil($user->perfil_id, []);
 
         if (!$token || $user->active === 'N') {
