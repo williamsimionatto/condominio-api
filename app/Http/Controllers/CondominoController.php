@@ -18,6 +18,8 @@ class CondominoController extends Controller implements GetAllInterface,
                                                         DeleteInterface {
     private $repository;
     private $validator;
+    private $hasPermissions;
+
     private $rules = [
         'name' => 'required|string|max:255',
         'cpf' => 'required|string|max:255',
@@ -29,9 +31,14 @@ class CondominoController extends Controller implements GetAllInterface,
         'ativo' => 'required|string|max:1',
     ];
 
-    public function __construct(CondominoRepository $repository, Validator $validator) {
+    public function __construct(
+        CondominoRepository $repository, 
+        Validator $validator,
+        HasPermissions $hasPermissions
+    ) {
         $this->repository = $repository;
         $this->validator = $validator;
+        $this->hasPermissions = $hasPermissions;
     }
 
     public function getAll(Request $request): JsonResponse {
