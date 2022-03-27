@@ -46,12 +46,12 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         $this->repositoryCondomino = $repositoryCondomino;
     }
 
-    public function getAll(): JsonResponse {
+    public function getAll(Request $request): JsonResponse {
         $leituras = $this->repository->getAll();
         return response()->json($leituras);
     }
 
-    public function getById($id): JsonResponse {
+    public function getById(Request $request, $id): JsonResponse {
         $leitura = $this->repository->getById($id);
         return response()->json($leitura);
     }

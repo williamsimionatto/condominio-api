@@ -34,12 +34,12 @@ class CondominoController extends Controller implements GetAllInterface,
         $this->validator = $validator;
     }
 
-    public function getAll(): JsonResponse {
+    public function getAll(Request $request): JsonResponse {
         $condominios = $this->repository->getAll();
         return response()->json($condominios);
     }
 
-    public function getByCondomino($id): JsonResponse {
+    public function getByCondomino(Request $request, $id): JsonResponse {
         $condominio = $this->repository->getbyCondominio($id);
         return response()->json($condominio);
     }
