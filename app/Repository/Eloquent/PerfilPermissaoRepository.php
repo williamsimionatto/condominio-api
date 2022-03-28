@@ -40,6 +40,23 @@ class PerfilPermissaoRepository extends BaseRepository implements PerfilPermissa
         return $permissoes;
     }
 
+    public function getPermissoesByPerfilAndSigla(int $idPerfil, string $sigla) {
+        $permissoes = Permissao::select(['permissao.sigla',
+                                        DB::raw("COALESCE(perfilpermisao.consultar, 'N') AS consultar"),
+                                        DB::raw("COALESCE(perfilpermisao.inserir, 'N') AS inserir"),
+                                        DB::raw("COALESCE(perfilpermisao.alterar, 'N') AS alterar"),
+                                        DB::raw("COALESCE(perfilpermisao.excluir, 'N') AS excluir")])
+            ->leftjoin('perfilpermisao', function($join) use ($idPerfil) {
+                $join->on('perfilpermisao.permissao', '=', 'permissao.id')
+                    ->where('perfilpermisao.perfil', '=', $idPerfil);
+            })
+            ->where('permissao.sigla', $sigla)
+            ->orderBy('permissao.name')
+            ->get();
+
+        return $permissoes;
+    }
+
     public function deletePermissoesByPerfil($idPerfil) {
         return $this->model->where('perfil', $idPerfil)->delete();
     }
