@@ -11,6 +11,7 @@ use App\Repository\Eloquent\CondominoRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Helpers\Validator;
+use App\Helpers\HasPermissions;
 
 class CondominoController extends Controller implements GetAllInterface,
                                                         SaveInterface,
