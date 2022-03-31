@@ -2,9 +2,10 @@
 
 namespace App\Repository\Eloquent;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\LeituraAguaValores;
 use App\Repository\Interfaces\LeituraAguaValoresRepositoryInterface;
+
+use Illuminate\Support\Facades\DB;
 
 class LeituraAguaValoresRepository extends BaseRepository implements LeituraAguaValoresRepositoryInterface {
     protected $model;
@@ -18,7 +19,7 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
     }
 
     public function get($filter) {
-        $leituraAgua = LeituraAgua::where($filter);
+        $leituraAgua = LeituraAguaValores::where($filter);
         return $leituraAgua;
     }
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Condominio;
 use App\Models\LeituraAguaValores;
-use App\Repository\Eloquent\CondominioRepository;
 use App\Repository\Eloquent\LeituraAguaValoresRepository;
 use Illuminate\Http\Request;
 
@@ -41,7 +40,7 @@ class LeituraAguaValoresController extends Controller {
         $update['qtdlimpezasalao'] = $data['qtdlimpezasalao'];
         $update['qtdmudanca'] = $data['qtdmudanca'];
 
-        $leitura = $this->condominioRepository->get([
+        $leitura = $this->leituraAguaValoresRepository->get([
             'leitura_agua' => $update['leitura_agua'],
             'condomino' => $update['condomino']
         ]);
