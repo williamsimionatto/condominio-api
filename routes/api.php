@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\CondominoController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\LeituraAguaController;
 use App\Http\Controllers\LeituraAguaValoresController;
 use App\Http\Controllers\PerfilController;
@@ -48,6 +49,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::get('condominos/valores', [LeituraAguaValoresController::class, 'getValoresCondominos']);
         Route::post('condominos/valores', [LeituraAguaValoresController::class, 'save']);
         Route::put('condominos/valores/{id}', [LeituraAguaValoresController::class, 'update']);
+        Route::post('condominos/{id}/boleto', [FileUploadController::class, 'save']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
