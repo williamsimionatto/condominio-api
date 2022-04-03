@@ -37,5 +37,19 @@ class FileUploadController extends Controller {
     public function downloadFile(Request $request, $id) {
         $file = LeituraAguaDocumentos::where('leitura_agua_valores', '=', $id)->first();
         $fileName = $file->nomearquivo;
+        $file = base64_decode($file->arquivo);
+        file_put_contents($fileName, $file);
+
+        if (file_exists($fileName)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($fileName).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($fileName));
+            readfile($fileName);
+            exit;
+        }
     }
 }
