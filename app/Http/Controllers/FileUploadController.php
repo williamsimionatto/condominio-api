@@ -19,10 +19,15 @@ class FileUploadController extends Controller {
             $pdf->tipoanexo = $file->getClientOriginalExtension();
             $pdf->tamanho = $file->getSize();
             $pdf->arquivo = base64_encode(file_get_contents($file->getRealPath()));
+            $arquivo = LeituraAguaDocumentos::where('leitura_agua_valores', '=', $data['leituraId'])->first();
+            if ($arquivo) {
+                $arquivo->delete();
+            }
+
             $save = $pdf->save();
 
             if ($save) {
-                return response()->json(['success' => true, 'message' => 'Arquivo salvo com sucesso.', 'save'=>$pdf->id], 200);
+                return response()->json(['success' => true, 'message' => 'Arquivo salvo com sucesso.', 'fileId'=>$pdf->id], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'Erro ao salvar arquivo.'], 500);
             }
