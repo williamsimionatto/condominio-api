@@ -50,6 +50,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::post('condominos/valores', [LeituraAguaValoresController::class, 'save']);
         Route::put('condominos/valores/{id}', [LeituraAguaValoresController::class, 'update']);
         Route::post('condominos/{id}/boleto', [FileUploadController::class, 'save']);
+        Route::get('condominos/{id}/boleto', [FileUploadController::class, 'downloadFile']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {
