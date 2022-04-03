@@ -54,7 +54,7 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
 
     public function getValoresCondominos($filter) {
         $results = DB::select(
-            "SELECT la.id, lav.leitura_agua AS leituraagua,
+            "SELECT la.id, lav.id AS leituraagua,
                     c.id AS condominoId,
                     CONCAT(c.apartamento, ' - ', c.name)	AS condomino,
                     CASE WHEN c.sindico = 'S' THEN 0.00
