@@ -23,6 +23,8 @@ class CreateLeituraAguaDocumentosTable extends Migration
             $table->timestamps();
         });
 
+        DB::statement("ALTER TABLE leitura_agua_documentos ADD arquivo LONGBLOB");
+
         Schema::table('leitura_agua_documentos', function (Blueprint $table) {
             $table->foreign('leitura_agua_valores')->references('id')->on('leitura_agua_valores');
         });
