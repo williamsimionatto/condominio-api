@@ -51,6 +51,7 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::put('condominos/valores/{id}', [LeituraAguaValoresController::class, 'update']);
         Route::post('condominos/{id}/boleto', [FileUploadController::class, 'save']);
         Route::get('condominos/{id}/boleto', [FileUploadController::class, 'downloadFile']);
+        Route::delete('condominos/{id}/boleto', [FileUploadController::class, 'deleteFile']);
     });
 
     Route::group(['prefix'=>'perfil', 'where'=>['id'=>'[0-9]+']], function() {

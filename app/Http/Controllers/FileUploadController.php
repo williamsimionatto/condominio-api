@@ -36,16 +36,30 @@ class FileUploadController extends Controller {
 
     public function downloadFile(Request $request, $id) {
         $file = LeituraAguaDocumentos::where('leitura_agua_valores', '=', $id)->first();
-        $fileName = $file->nomearquivo;
-        $file = base64_decode($file->arquivo);
-        file_put_contents($fileName, $file);
+        if ($file && $file->arquivo) {
+            $fileName = $file->nomearquivo;
 
-        if (file_exists($fileName)) {
-            return response()->download($fileName, 'boleto.pdf', [
-                'Content-Length: ' . filesize($fileName),
-            ], 'attachment');
+            $file = base64_decode($file->arquivo);
+            file_put_contents($fileName, $file);
+    
+            if (file_exists($fileName)) {
+                return response()->download($fileName, $fileName, [
+                    'Content-Length: ' . filesize($fileName),
+                ], 'attachment');
+            }
         }
 
         return response()->json(['success' => false, 'message' => 'Erro ao baixar arquivo.'], 500);
+    }
+
+    public function deleteFile(Request $request, $id) {
+        $file = LeituraAguaDocumentos::where('leitura_agua_valores', '=', $id)->first();
+        $delete = $file->delete();
+
+        if ($delete) {
+            return response()->json(['success' => true, 'message' => 'Arquivo excluído com sucesso.'], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Erro ao excluir arquivo.'], 500);
+        }
     }
 }
