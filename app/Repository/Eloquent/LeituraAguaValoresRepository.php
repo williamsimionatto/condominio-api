@@ -66,10 +66,11 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
                     ABS(lav.consumo - COALESCE(sub.consumo, 0)) AS consumo, 
                     lav.qtdusosalao, lav.qtdlimpezasalao, lav.qtdmudanca,
                     hvc.valoragua, hvc.taxaboleto, hvc.taxabasicaagua, 0 AS total,
-                    c.id as condominoId
+                    c.id as condominoId, lad.id as fileId, lad.nomearquivo as fileName
             FROM leitura_agua la
             JOIN leitura_agua_valores lav ON la.id = lav.leitura_agua
             JOIN historico_valores_condominios hvc ON hvc.leitura = la.id
+            LEFT JOIN leitura_agua_documentos lad ON lad.leitura_agua_valores = lav.id
             JOIN condomino c ON lav.condomino = c.id
             LEFT JOIN (
                 SELECT lav.*
