@@ -43,14 +43,14 @@ class LeituraAguaValoresController extends Controller {
         $leitura = $this->leituraAguaValoresRepository->get([
             'leitura_agua' => $update['leitura_agua'],
             'condomino' => $update['condomino']
-        ]);
+        ])->update($update);
 
-        if ($leitura->count() > 0) {
-            $leitura->update($update);
-            return response()->json($leitura);
-        }
+        return response()->json($leitura);
+        // if ($leitura->count() > 0) {
+        //     $leitura->update($update);
+        // }
 
-        return response(204);
+        // return response(204);
     }
 
     public function getCondominos(Request $request) {
