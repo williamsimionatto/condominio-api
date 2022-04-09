@@ -6,6 +6,7 @@ use App\Models\Condominio;
 use App\Models\LeituraAguaValores;
 use App\Repository\Eloquent\LeituraAguaValoresRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LeituraAguaValoresController extends Controller {
     private $leituraAguaValoresRepository;
@@ -40,10 +41,14 @@ class LeituraAguaValoresController extends Controller {
         $update['qtdlimpezasalao'] = $data['qtdlimpezasalao'];
         $update['qtdmudanca'] = $data['qtdmudanca'];
 
+        DB::beginTransaction();
         $leitura = $this->leituraAguaValoresRepository->get([
             'leitura_agua' => $update['leitura_agua'],
             'condomino' => $update['condomino']
-        ])->update($update);
+        ])->lockForUpdate()->first();
+
+        $leitura->update($update);
+        DB::commit();
 
         return response()->json($leitura);
         // if ($leitura->count() > 0) {
