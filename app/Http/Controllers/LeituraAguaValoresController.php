@@ -51,11 +51,6 @@ class LeituraAguaValoresController extends Controller {
         DB::commit();
 
         return response()->json($leitura);
-        // if ($leitura->count() > 0) {
-        //     $leitura->update($update);
-        // }
-
-        // return response(204);
     }
 
     public function getCondominos(Request $request) {
