@@ -30,6 +30,7 @@ class CondominoController extends Controller implements GetAllInterface,
         'apartamento' => 'required|integer|string',
         'condominio' => 'required|integer',
         'ativo' => 'required|string|max:1',
+        'position' => 'required|integer|min:1|max:15',
     ];
 
     public function __construct(
