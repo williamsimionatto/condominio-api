@@ -17,7 +17,7 @@ class BaseRepository implements EloquentRepositoryInterface {
     }
 
     public function getAll() {
-        return $this->model::all();
+        return $this->model::all()->orderby('position', 'asc');
     }
 
     public function getById($id) {

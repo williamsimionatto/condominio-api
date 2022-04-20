@@ -17,7 +17,7 @@ class CondominoRepository extends BaseRepository implements CondominoRepositoryI
     }
 
     public function getbyCondominio($id) {
-        return $this->model->where('condominio', $id)->get();
+        return $this->model->where('condominio', $id)->get()->orderby('position', 'asc');
     }
 
     public function save($data): Condomino {

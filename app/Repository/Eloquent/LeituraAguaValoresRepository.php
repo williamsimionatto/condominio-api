@@ -42,7 +42,8 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
                 JOIN leitura_agua la ON lav.leitura_agua  = la.id
                 WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
             ) AS sub ON sub.condomino = c.id
-            WHERE c.ativo = :flAtivo",
+            WHERE c.ativo = :flAtivo
+            ORDER BY c.position",
             [
                 'dataLeitura' => $filter['date'],
                 'flAtivo' => 'S'
@@ -78,7 +79,8 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
                 JOIN leitura_agua la ON lav.leitura_agua  = la.id
                 WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
             ) AS sub ON sub.condomino = lav.condomino
-            WHERE lav.leitura_agua = :idLeitura",
+            WHERE lav.leitura_agua = :idLeitura
+            ORDER BY c.position",
             [
                 'idLeitura' => $filter['id'],
                 'dataLeitura' => $filter['date']

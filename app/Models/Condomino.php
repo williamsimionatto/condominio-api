@@ -18,6 +18,7 @@ class Condomino extends Model {
         'sindico',
         'tipo',
         'ativo',
+        'position',
     ];
 
     public function leituraAgua() {
