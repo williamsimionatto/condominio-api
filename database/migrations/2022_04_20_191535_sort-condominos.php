@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class SortCondominos extends Migration {
     public function up() {
         Schema::table('condomino', function (Blueprint $table) {
-            $table->integer('position')->nullable()->default(0);
+            $table->integer('position')->nullable()->default(1)->unique();
         });
     }
 
