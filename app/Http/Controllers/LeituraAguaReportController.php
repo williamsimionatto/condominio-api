@@ -9,6 +9,13 @@ class LeituraAguaReportController extends Controller {
     public function report(Request $request) {
         $dataInicial = $request->input('dataInicial');
         $dataFinal = $request->input('dataFinal');
+        $condomino = $request->input('condomino');
+
+        if ($condomino && !is_int($condomino)) {
+            return new JsonResponse(['message' => 'Condômino inválido'], 400);
+        }
+
+        $condomino = $condomino ? " AND c.id = ".$condomino : " AND TRUE";
 
         $results = DB::select(
             "SELECT la.dataleitura, c.id,
@@ -36,16 +43,16 @@ class LeituraAguaReportController extends Controller {
                 FROM leitura_agua_valores sub_lav
                 JOIN leitura_agua sub_la ON sub_lav.leitura_agua  = sub_la.id
             ) AS sub ON sub.condomino = lav.condomino AND EXTRACT(YEAR_MONTH FROM sub.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(la.dataleitura, INTERVAL 1 MONTH))
-            WHERE TRUE AND la.dataleitura BETWEEN :dataInicial AND :dataFinal
+            WHERE TRUE AND la.dataleitura BETWEEN :dataInicial AND :dataFinal $condomino
             GROUP BY la.dataleitura, lav.condomino
             ORDER BY la.dataleitura DESC, c.apartamento",
             [
                 'dataInicial' => $dataInicial ? $dataInicial : date( 'Y' ) . '-01-01',
-                'dataFinal' => $dataFinal ? $dataFinal : date( 'Y' ) . '-12-31'
+                'dataFinal' => $dataFinal ? $dataFinal : date( 'Y' ) . '-12-31',
             ],
             [
                 'dataInicial' => \PDO::PARAM_STR,
-                'dataFinal' => \PDO::PARAM_STR
+                'dataFinal' => \PDO::PARAM_STR,
             ]
         );
 
