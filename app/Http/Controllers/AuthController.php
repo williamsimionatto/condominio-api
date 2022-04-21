@@ -27,7 +27,7 @@ class AuthController extends Controller {
         $token = auth('api')->attempt($credentials);
         $user = $this->userRepository->getByEmail($request->email);
 
-        $permissions = $this->perfilPermissiaoRepository->getPermissoesByPerfil($user->perfil_id, []);
+        $permissions = $this->perfilPermissiaoRepository->getPermissoesByPerfil($user->perfil->id, []);
 
         if (!$token || $user->active === 'N') {
             return response()->json(['error' => 'Credenciais Inválidas'], 401);

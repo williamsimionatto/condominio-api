@@ -28,7 +28,7 @@ class User extends Authenticatable implements JWTSubject {
     ];
 
     public function perfil() {
-        return $this->hasOne(Perfil::class, 'perfil_id');
+        return $this->hasOne(Perfil::class, 'id');
     }
 
     public function getJWTIdentifier() {
@@ -40,7 +40,6 @@ class User extends Authenticatable implements JWTSubject {
             'user' => [
                 'id' => $this->id,
                 'name' => $this->name,
-                'perfil_id' => $this->perfil_id,
                 'email' => $this->email,
             ]
         ];
