@@ -4,7 +4,6 @@ namespace App\Repository\Eloquent;
 
 use App\Models\LeituraAguaValores;
 use App\Repository\Interfaces\LeituraAguaValoresRepositoryInterface;
-
 use Illuminate\Support\Facades\DB;
 
 class LeituraAguaValoresRepository extends BaseRepository implements LeituraAguaValoresRepositoryInterface {
@@ -37,7 +36,7 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
             FROM condomino c
             JOIN condominio co ON c.condominio = co.id
             LEFT JOIN (
-                SELECT lav.*
+                SELECT lav.consumo, lav.condomino
                 FROM leitura_agua_valores lav
                 JOIN leitura_agua la ON lav.leitura_agua  = la.id
                 WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
@@ -74,7 +73,7 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
             LEFT JOIN leitura_agua_documentos lad ON lad.leitura_agua_valores = lav.id
             JOIN condomino c ON lav.condomino = c.id
             LEFT JOIN (
-                SELECT lav.*
+                SELECT lav.consumo, lav.condomino
                 FROM leitura_agua_valores lav
                 JOIN leitura_agua la ON lav.leitura_agua  = la.id
                 WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
@@ -86,7 +85,7 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
                 'dataLeitura' => $filter['date']
             ]
         );
-        
+
         return $results;
     }
 }
