@@ -9,6 +9,7 @@ class Perfil extends Model {
     use HasFactory;
     protected $table = "perfil";
     protected $fillable = ['name', 'sigla'];
+    protected $hidden = ['created_at', 'updated_at'];
 
     public function users() {
         return $this->hasMany(User::class, 'perfil_id');

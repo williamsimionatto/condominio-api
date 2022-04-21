@@ -32,12 +32,9 @@ class UserRepository  extends BaseRepository implements UserRepositoryInterface 
     }
 
     public function getByEmail($email) {
-        return $this->model::where('email', $email)
-                ->select(['id', 'name', 'email', 'active'])
-                ->with(['perfil' => function ($query) {
-                    $query->select('id', 'name', 'sigla');
-                }])
-                ->first();
+        return $this->model::select(['id', 'name', 'email', 'active', 'perfil_id'])
+                    ->where('email', $email)
+                    ->first();
     }
 
     public function refreshPassword($id, $password) {
