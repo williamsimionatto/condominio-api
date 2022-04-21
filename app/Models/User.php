@@ -28,7 +28,7 @@ class User extends Authenticatable implements JWTSubject {
     ];
 
     public function perfil() {
-        return $this->hasOne(Perfil::class, 'id');
+        return $this->hasOne(Perfil::class, 'perfil_id');
     }
 
     public function getJWTIdentifier() {
