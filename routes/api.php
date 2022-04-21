@@ -5,6 +5,7 @@ use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\CondominoController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\LeituraAguaController;
+use App\Http\Controllers\LeituraAguaReportController;
 use App\Http\Controllers\LeituraAguaValoresController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilPermissaoController;
@@ -73,6 +74,10 @@ Route::group(['middleware'=>'apiJWT'], function() {
     Route::group(['prefix'=>'perfilpermissao', 'where'=>['id'=>'[0-9]+']], function() {
         Route::get('/{id}', [PerfilPermissaoController::class, 'getPermissoesByPerfil']);
         Route::post('/', [PerfilPermissaoController::class, 'save']);
+    });
+
+    Route::group(['prefix'=>'report'], function() {
+        Route::get('leituraagua', [LeituraAguaReportController::class, 'report']);
     });
 
     Route::group(['prefix'=>'user', 'where'=>['id'=>'[0-9]+']], function() {
