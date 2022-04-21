@@ -32,7 +32,7 @@ class UserRepository  extends BaseRepository implements UserRepositoryInterface 
     }
 
     public function getByEmail($email) {
-        return $this->model::select(['id', 'name', 'email', 'active', 'perfil_id'])
+        return $this->model::select(['id', 'name', 'email', 'active', 'perfil_id', 'cpf'])
                     ->where('email', $email)
                     ->first();
     }
