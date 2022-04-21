@@ -25,7 +25,7 @@ class LeituraAguaReportController extends Controller {
                         (hvc.valorsalaofestas * lav.qtdusosalao) + 
                         (hvc.valorlimpezasalaofestas * lav.qtdlimpezasalao) +
                         (hvc.valormudanca * lav.qtdmudanca)
-                    ) AS valorTotal, lad.id AS fileId, lad.nomearquivo AS fileName
+                    ) AS valorTotal, lad.leitura_agua_valores AS fileId, lad.nomearquivo AS fileName
             FROM leitura_agua la
             JOIN leitura_agua_valores lav ON la.id = lav.leitura_agua
             JOIN historico_valores_condominios hvc ON hvc.leitura = la.id
@@ -52,4 +52,3 @@ class LeituraAguaReportController extends Controller {
         return response()->json($results);
     }
 }
-
