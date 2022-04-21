@@ -11,7 +11,7 @@ class LeituraAguaReportController extends Controller {
         $dataFinal = $request->input('dataFinal');
         $condomino = $request->input('condomino');
 
-        if ($condomino && !is_int($condomino)) {
+        if ($condomino && !preg_match("/^(0|-*[1-9]+[0-9]*)$/", $condomino)) {
             return new JsonResponse(['message' => 'Condômino inválido'], 400);
         }
 
