@@ -13,6 +13,7 @@ use App\Repository\Eloquent\CondominioRepository;
 use App\Repository\Eloquent\CondominoRepository;
 use App\Repository\Eloquent\HistoricoValoresCondominioRepository;
 use App\Repository\Eloquent\LeituraAguaRepository;
+use Error;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -62,29 +63,37 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     }
 
     public function save(Request $request): JsonResponse {
-        $data = $request->all();
-        $this->validateFields($data, $this->rules);
+        try {
+            $data = $request->all();
+            $this->validateFields($data, $this->rules);
 
-        $leitura = $this->repository->save($data);
+            if ($this->repository->isUniqueLeituraMonth($data['condominio'], $data['dataleitura'])) {
+                throw new Error('Já existe uma leitura para mês-ano informado!');
+            }
 
-        $condominio = $this->repositoryCondominio->getById($data['condominio']);
-        $sindico = $this->repositoryCondomino->getSindico();
+            $leitura = $this->repository->save($data);
 
-        $historicoValores = [];
-        $historicoValores['leitura'] = $leitura->id;
-        $historicoValores['condominio2quartos'] = $condominio->condominio2quartos;
-        $historicoValores['condominio3quartos'] = $condominio->condominio3quartos;
-        $historicoValores['condominiosalacomercial'] = $condominio->condominiosalacomercial;
-        $historicoValores['valoragua'] = $condominio->valoragua;
-        $historicoValores['valorsalaofestas'] = $condominio->valorsalaofestas;
-        $historicoValores['valorlimpezasalaofestas'] = $condominio->valorlimpezasalaofestas;
-        $historicoValores['valormudanca'] = $condominio->valormudanca;
-        $historicoValores['sindico'] = $sindico->id;
-        $historicoValores['taxaboleto'] = $condominio->taxaboleto;
-        $historicoValores['taxabasicaagua'] = $condominio->taxabasicaagua;
+            $condominio = $this->repositoryCondominio->getById($data['condominio']);
+            $sindico = $this->repositoryCondomino->getSindico();
 
-        $this->repositoryHistoricoValores->save($historicoValores);
-        return response()->json($leitura);
+            $historicoValores = [];
+            $historicoValores['leitura'] = $leitura->id;
+            $historicoValores['condominio2quartos'] = $condominio->condominio2quartos;
+            $historicoValores['condominio3quartos'] = $condominio->condominio3quartos;
+            $historicoValores['condominiosalacomercial'] = $condominio->condominiosalacomercial;
+            $historicoValores['valoragua'] = $condominio->valoragua;
+            $historicoValores['valorsalaofestas'] = $condominio->valorsalaofestas;
+            $historicoValores['valorlimpezasalaofestas'] = $condominio->valorlimpezasalaofestas;
+            $historicoValores['valormudanca'] = $condominio->valormudanca;
+            $historicoValores['sindico'] = $sindico->id;
+            $historicoValores['taxaboleto'] = $condominio->taxaboleto;
+            $historicoValores['taxabasicaagua'] = $condominio->taxabasicaagua;
+
+            $this->repositoryHistoricoValores->save($historicoValores);
+            return response()->json($leitura);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, $id): JsonResponse {
