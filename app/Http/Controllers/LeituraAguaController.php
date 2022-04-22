@@ -88,18 +88,19 @@ class LeituraAguaController extends Controller implements GetAllInterface,
             $condominio = $this->repositoryCondominio->getById($data['condominio']);
             $sindico = $this->repositoryCondomino->getSindico();
 
-            $historicoValores = [];
-            $historicoValores['leitura'] = $leitura->id;
-            $historicoValores['condominio2quartos'] = $condominio->condominio2quartos;
-            $historicoValores['condominio3quartos'] = $condominio->condominio3quartos;
-            $historicoValores['condominiosalacomercial'] = $condominio->condominiosalacomercial;
-            $historicoValores['valoragua'] = $condominio->valoragua;
-            $historicoValores['valorsalaofestas'] = $condominio->valorsalaofestas;
-            $historicoValores['valorlimpezasalaofestas'] = $condominio->valorlimpezasalaofestas;
-            $historicoValores['valormudanca'] = $condominio->valormudanca;
-            $historicoValores['sindico'] = $sindico->id;
-            $historicoValores['taxaboleto'] = $condominio->taxaboleto;
-            $historicoValores['taxabasicaagua'] = $condominio->taxabasicaagua;
+            $historicoValores = [
+                'leitura' => $leitura->id,
+                'condominio2quartos' => $condominio->condominio2quartos,
+                'condominio3quartos' => $condominio->condominio3quartos,
+                'condominiosalacomercial' => $condominio->condominiosalacomercial,
+                'valoragua' => $condominio->valoragua,
+                'valorsalaofestas' => $condominio->valorsalaofestas,
+                'valorlimpezasalaofestas' => $condominio->valorlimpezasalaofestas,
+                'valormudanca' => $condominio->valormudanca,
+                'sindico'=> $sindico->id,
+                'taxaboleto'=> $condominio->taxaboleto,
+                'taxabasicaagua'=> $condominio->taxabasicaagua,
+            ];
 
             $this->repositoryHistoricoValores->save($historicoValores);
             return response()->json($leitura);
