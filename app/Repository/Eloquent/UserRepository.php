@@ -48,4 +48,15 @@ class UserRepository  extends BaseRepository implements UserRepositoryInterface 
         $user = $this->model::find($id);
         return Hash::check($password, $user->password);
     }
+
+    public function inactive($cpf) {
+        $user = $this->model::where('cpf', $cpf);
+        if ($user->active !== 'N') {
+            $user->update([
+                'active' => 'N'
+            ]);
+        }
+
+        return $user;
+    }
 }

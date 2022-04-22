@@ -15,8 +15,8 @@ class FileUploadController extends Controller {
         if ($file) {
             $pdf = new LeituraAguaDocumentos();
             $pdf->leitura_agua_valores = $data['leituraId'];
-            $pdf->nomearquivo = $file->getClientOriginalName();
-            $pdf->tipoanexo = $file->getClientOriginalExtension();
+            $pdf->nomearquivo = trim($file->getClientOriginalName());
+            $pdf->tipoanexo = trim($file->getClientOriginalExtension());
             $pdf->tamanho = $file->getSize();
             $pdf->arquivo = base64_encode(file_get_contents($file->getRealPath()));
             $arquivo = LeituraAguaDocumentos::where('leitura_agua_valores', '=', $data['leituraId'])->first();
