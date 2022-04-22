@@ -27,4 +27,19 @@ class LeituraAguaRepository extends BaseRepository implements LeituraAguaReposit
         $leituras = $this->model->where('condominio', $id)->get();
         return $leituras;
     }
+
+    public function isUniqueLeituraMonth($condominio, $dataleitura) {
+        $month = date('m', strtotime($dataleitura));
+        $year = date('Y', strtotime($dataleitura));
+        $dataInicial = date('Y-m-d', strtotime($year . '-' . $month . '-01'));
+        $dataFinal = date('Y-m-t', strtotime($dataInicial));
+
+        $leitura = $this->model->where('condominio', $condominio)
+                ->whereBetween('dataleitura', 
+                    [$dataInicial, $dataFinal]
+                )
+                ->first();
+
+        return $leitura->count() == 0;
+    }
 }

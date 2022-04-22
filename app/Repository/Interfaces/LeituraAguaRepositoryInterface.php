@@ -6,4 +6,5 @@ use App\Repository\EloquentRepositoryInterface;
 
 interface LeituraAguaRepositoryInterface extends EloquentRepositoryInterface {
     public function getByCondominio($id);
+    public function isUniqueLeituraMonth($condominio, $dataleitura);
 }
