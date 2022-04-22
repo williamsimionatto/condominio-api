@@ -13,9 +13,9 @@ use App\Repository\Eloquent\CondominioRepository;
 use App\Repository\Eloquent\CondominoRepository;
 use App\Repository\Eloquent\HistoricoValoresCondominioRepository;
 use App\Repository\Eloquent\LeituraAguaRepository;
-use Error;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Error;
 
 class LeituraAguaController extends Controller implements GetAllInterface,
                                                           GetByIdInterface,
@@ -48,18 +48,30 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     }
 
     public function getAll(Request $request): JsonResponse {
-        $leituras = $this->repository->getAll();
-        return response()->json($leituras);
+        try {
+            $leituras = $this->repository->getAll();
+            return response()->json($leituras);
+        } catch (Error $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function getById(Request $request, $id): JsonResponse {
-        $leitura = $this->repository->getById($id);
-        return response()->json($leitura);
+        try {
+            $leitura = $this->repository->getById($id);
+            return response()->json($leitura);
+        } catch (Error $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function getByCondominio($id): JsonResponse {
-        $leituras = $this->repository->getByCondominio($id);
-        return response()->json($leituras);
+        try {
+            $leituras = $this->repository->getByCondominio($id);
+            return response()->json($leituras);
+        } catch (Error $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function save(Request $request): JsonResponse {
