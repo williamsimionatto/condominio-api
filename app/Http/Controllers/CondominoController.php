@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Helpers\Validator;
 use App\Helpers\HasPermissions;
+use App\Repository\Eloquent\UserRepository;
 
 class CondominoController extends Controller implements GetAllInterface,
                                                         SaveInterface,
@@ -20,6 +21,7 @@ class CondominoController extends Controller implements GetAllInterface,
     private $repository;
     private $validator;
     private $hasPermissions;
+    private $userRepository;
 
     private $rules = [
         'name' => 'required|string|max:255',
@@ -34,13 +36,15 @@ class CondominoController extends Controller implements GetAllInterface,
     ];
 
     public function __construct(
-        CondominoRepository $repository, 
+        CondominoRepository $repository,
         Validator $validator,
-        HasPermissions $hasPermissions
+        HasPermissions $hasPermissions,
+        UserRepository $userRepository
     ) {
         $this->repository = $repository;
         $this->validator = $validator;
         $this->hasPermissions = $hasPermissions;
+        $this->userRepository = $userRepository;
     }
 
     public function getAll(Request $request): JsonResponse {
@@ -54,19 +58,35 @@ class CondominoController extends Controller implements GetAllInterface,
     }
 
     public function save(Request $request): JsonResponse {
-        $data = $request->all();
-        $this->validateFields($data, $this->rules);
+        try {
+            $data = $request->all();
+            $this->validateFields($data, $this->rules);
+            $condomino = $this->repository->save($data);
 
-        $condominio = $this->repository->save($data);
-        return response()->json($condominio);
+            if ($condomino->ativo == 'N') {
+                $this->userRepository->inactive($condomino->cpf);
+            }
+
+            return response()->json($condomino);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, $id): JsonResponse {
-        $data = $request->all();
-        $this->validateFields($data, $this->rules);
+        try {
+            $data = $request->all();
+            $this->validateFields($data, $this->rules);
 
-        $condominio = $this->repository->update($id, $data);
-        return response()->json($condominio);
+            $condominio = $this->repository->update($id, $data);
+            if ($condomino->ativo == 'N') {
+                $this->userRepository->inactive($condomino->cpf);
+            }
+
+            return response()->json($condominio);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function delete(Request $request, $id): JsonResponse {
