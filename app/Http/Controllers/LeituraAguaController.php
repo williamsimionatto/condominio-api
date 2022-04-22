@@ -137,6 +137,9 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         try {
             $condominio = $request->input('condominio');
             $dataleitura = $request->input('dataleitura');
+            if (!$condominio || !$dataleitura) {
+                throw new Error('Parâmetros inválidos!');
+            }
 
             $leitura = $this->repository->isUniqueLeituraMonth($condominio, $dataleitura);
             return response()->json(['unique'=>$leitura]);
