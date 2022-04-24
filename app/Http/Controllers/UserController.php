@@ -78,7 +78,8 @@ class UserController extends Controller {
     }
 
     public function verifyPassword(Request $request, $id) {
-        return $this->repository->verifyPassword($id, $request->password);
+        $igual = $this->repository->verifyPassword($id, $request->password);
+        return response()->json(['ok'=>$igual]);
     }
 
     private function validateFields(Array $data, Array $rules) {
