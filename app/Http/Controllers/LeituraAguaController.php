@@ -142,7 +142,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
             }
 
             $leitura = $this->repository->isUniqueLeituraMonth($condominio, $dataleitura);
-            return response()->json(['unique'=>$leitura]);
+            return response()->json(['unique'=>!$leitura]);
         } catch (Error $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
