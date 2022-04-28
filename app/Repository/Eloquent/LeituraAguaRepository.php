@@ -40,6 +40,6 @@ class LeituraAguaRepository extends BaseRepository implements LeituraAguaReposit
                 )
                 ->first();
 
-        return ($leitura && $leitura->count() == 0) || !$leitura; 
+        return ($leitura && $leitura->count() == 0) || $leitura; 
     }
 }
