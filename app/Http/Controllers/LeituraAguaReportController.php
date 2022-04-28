@@ -33,6 +33,7 @@ class LeituraAguaReportController extends Controller {
                         (hvc.valorlimpezasalaofestas * lav.qtdlimpezasalao) +
                         (hvc.valormudanca * lav.qtdmudanca)
                     ) AS valorTotal, DATEDIFF(la.dataleitura, sub.dataleitura) as diasConsumo,
+                    DATE_SUB(la.dataleitura, INTERVAL 1 MONTH) as mesreferencia,
                     lad.leitura_agua_valores AS fileId, lad.nomearquivo AS fileName
             FROM leitura_agua la
             JOIN leitura_agua_valores lav ON la.id = lav.leitura_agua
