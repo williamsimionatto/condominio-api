@@ -45,7 +45,7 @@ class LeituraAguaReportController extends Controller {
                 FROM leitura_agua_valores sub_lav
                 JOIN leitura_agua sub_la ON sub_lav.leitura_agua  = sub_la.id
             ) AS sub ON sub.condomino = lav.condomino AND EXTRACT(YEAR_MONTH FROM sub.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(la.dataleitura, INTERVAL 1 MONTH))
-            WHERE TRUE AND la.dataleitura BETWEEN :dataInicial AND :dataFinal $condomino
+            WHERE TRUE AND DATE_SUB(la.dataleitura, INTERVAL 1 MONTH) BETWEEN :dataInicial AND :dataFinal $condomino
             GROUP BY la.dataleitura, lav.condomino
             ORDER BY la.dataleitura DESC, c.apartamento",
             [
