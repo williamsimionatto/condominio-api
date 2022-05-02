@@ -20,6 +20,15 @@ class FileUploadController extends Controller {
             $pdf->tamanho = $file->getSize();
             $pdf->arquivo = base64_encode(file_get_contents($file->getRealPath()));
             $arquivo = LeituraAguaDocumentos::where('leitura_agua_valores', '=', $data['leituraId'])->first();
+
+            if ($pdf->tamanho > 5242880) {
+                return response()->json(['success'=>false, 'message' => 'O arquivo não pode ser maior que 5MB'], 400);
+            }
+
+            if ($pdf->tipoanexo != 'pdf') {
+                return response()->json(['success'=>false, 'message' => 'O arquivo deve ser do tipo PDF'], 400);
+            }
+
             if ($arquivo) {
                 $arquivo->delete();
             }
