@@ -37,18 +37,7 @@ datahora: datetime
 ]
 ````
 
-* GET /ata/:id (application/json)
-	* Response (application/json)
-```json
-{
-	"id": 1,
-	"assunto": "Assunto 1",
-	"datahora": "2020-01-01 00:00:00",
-	"descricao": "Descrição 1"
-}
-```
-
-* GET /ata/:id/details (application/json)
+* GET /ata/:id/ (application/json)
 	* Response (application/json)
 ```json
 {
