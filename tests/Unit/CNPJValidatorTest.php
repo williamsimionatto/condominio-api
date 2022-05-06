@@ -15,6 +15,14 @@ class CNPJValidatorTest extends TestCase {
                     ->getMock();
     }
 
+    public function testIsCalledWith() {
+        $validator = $this->getValidatorStub();
+        $validator->expects($this->exactly(1))
+                  ->method('isValid')
+                  ->with('12345678901234');
+        $validator->isValid('12345678901234');
+    }
+
     public function testIsInvalidcnpj() {
         $stub = $this->getValidatorStub();
         $stub->method('isValid') ->willReturn(false);
