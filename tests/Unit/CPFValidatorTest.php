@@ -34,4 +34,10 @@ class CPFValidatorTest extends TestCase {
         $stub->method('isValid')->willReturn(true);
         $this->assertEquals(true, $stub->isValid('882.708.790-70'));
     }
+
+    public function testNullCpf() {
+        $stub = $this->getValidatorStub();
+        $stub->method('isValid')->willReturn(false);
+        $this->assertEquals(false, $stub->isValid(null));
+    }
 }
