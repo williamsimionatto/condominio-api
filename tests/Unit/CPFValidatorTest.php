@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
-use App\Helpers\CNPJValidator;
+use App\Helpers\CPFValidator;
 use PHPUnit\Framework\TestCase;
 
-class CNPJValidatorTest extends TestCase {
+class CPFValidatorTest extends TestCase {
     private function getValidatorStub() {
-        return $this->getMockBuilder(CNPJValidator::class)
+        return $this->getMockBuilder(CPFValidator::class)
                     ->disableOriginalConstructor()
                     ->disableOriginalClone()
                     ->disableArgumentCloning()
@@ -19,23 +19,23 @@ class CNPJValidatorTest extends TestCase {
         $validator = $this->getValidatorStub();
         $validator->expects($this->exactly(1))
                   ->method('isValid')
-                  ->with('12345678901234');
-        $validator->isValid('12345678901234');
+                  ->with('882.708.790-70');
+        $validator->isValid('882.708.790-70');
     }
 
-    public function testIsInvalidcnpj() {
+    public function testIsInvalidCpf() {
         $stub = $this->getValidatorStub();
         $stub->method('isValid')->willReturn(false);
-        $this->assertEquals(false, $stub->isValid('12345678901234'));
+        $this->assertEquals(false, $stub->isValid('882.708.790-70'));
     }
 
-    public function testIsValidcnpj() {
+    public function testIsValidCpf() {
         $stub = $this->getValidatorStub();
         $stub->method('isValid')->willReturn(true);
-        $this->assertEquals(true, $stub->isValid('49.278.393/0001-99'));
+        $this->assertEquals(true, $stub->isValid('882.708.790-70'));
     }
 
-    public function testNullCnpj() {
+    public function testNullCpf() {
         $stub = $this->getValidatorStub();
         $stub->method('isValid')->willReturn(false);
         $this->assertEquals(false, $stub->isValid(null));
