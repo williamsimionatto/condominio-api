@@ -22,4 +22,10 @@ class CPFValidatorTest extends TestCase {
                   ->with('882.708.790-70');
         $validator->isValid('882.708.790-70');
     }
+
+    public function testIsInvalidcpf() {
+        $stub = $this->getValidatorStub();
+        $stub->method('isValid')->willReturn(false);
+        $this->assertEquals(false, $stub->isValid('882.708.790-70'));
+    }
 }
