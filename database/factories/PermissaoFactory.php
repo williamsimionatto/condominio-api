@@ -14,8 +14,8 @@ class PermissaoFactory extends Factory
     public function definition()
     {
         return [
-            'name' =>'Cadastro de Usuários',
-            'sigla'=>'CAD_USUARIO'
+            'name' => $this->faker->word,
+            'sigla'=> $this->faker->word,
         ];
     }
 }
