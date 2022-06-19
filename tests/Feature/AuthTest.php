@@ -8,7 +8,7 @@ use Tests\TestCase;
 class AuthTest extends TestCase {
     public function testNoTokenInformed() {
         $response = $this->get('/api/permissao');
-        $response->assertStatus(401);
+        $response->assertStatus(403);
         $response->assertJson(['message' => 'Token de autorização não informado!']);
     }
 
@@ -16,7 +16,7 @@ class AuthTest extends TestCase {
         $response = $this->get('/api/permissao', [
             'Authorization' => 'Bearer 12345'
         ]);
-        $response->assertStatus(401);
+        $response->assertStatus(403);
         $response->assertJson(['message' => 'Token inválido!']);
     }
 
