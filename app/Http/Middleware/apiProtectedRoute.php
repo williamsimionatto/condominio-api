@@ -11,11 +11,11 @@ class apiProtectedRoute extends BaseMiddleware {
             $user = JWTAuth::parseToken()->authenticate();
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return response(['message'=>'Token inválido!'], 401);
+                return response(['message'=>'Token inválido!'], 403);
             } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return response(['message'=>'Token expirado!'], 401);
+                return response(['message'=>'Token expirado!'], 403);
             } else {
-                return response(['message'=>'Token de autorização não informado!'], 401);
+                return response(['message'=>'Token de autorização não informado!'], 403);
             }
         }
 
