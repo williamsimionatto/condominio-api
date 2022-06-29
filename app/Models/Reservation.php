@@ -12,10 +12,10 @@ class Reservation extends Model {
     protected $fillable = ['condomino_id', 'common_area_id', 'date'];
 
     public function condomino() {
-        return $this->hasOne(Condomino::class, 'condomino_id');
+        return $this->belongsTo(Condomino::class);
     }
 
     public function commonArea() {
-        return $this->hasOne(CommonArea::class, 'common_area_id');
+        return $this->belongsTo(CommonArea::class, 'common_area_id');
     }
 }

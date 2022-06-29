@@ -11,6 +11,7 @@ use App\Http\Controllers\LeituraAguaValoresController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilPermissaoController;
 use App\Http\Controllers\PermissaoController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 
 use App\Models\PerfilPermissao;
@@ -89,6 +90,14 @@ Route::group(['middleware'=>'apiJWT'], function() {
 
     Route::group(['prefix'=>'report'], function() {
         Route::get('leituraagua', [LeituraAguaReportController::class, 'report']);
+    });
+
+    Route::group(['prefix'=>'reservation', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::get('', [ReservationController::class, 'getAll']);
+        Route::get('/{id}', [ReservationController::class, 'getById']);
+        Route::post('', [ReservationController::class, 'save']);
+        Route::put('/{id}', [ReservationController::class, 'update']);
+        Route::delete('/{id}', [ReservationController::class, 'delete']);
     });
 
     Route::group(['prefix'=>'user', 'where'=>['id'=>'[0-9]+']], function() {
