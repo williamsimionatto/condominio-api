@@ -50,7 +50,7 @@ class UserRepository  extends BaseRepository implements UserRepositoryInterface 
     }
 
     public function inactive($cpf) {
-        $user = $this->model::where('cpf', $cpf);
+        $user = $this->model::where('cpf', $cpf)->first();
         if ($user && $user->active !== 'N') {
             $user->update([
                 'active' => 'N'
