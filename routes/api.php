@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommonAreaController;
 use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\CondominoController;
 use App\Http\Controllers\FileUploadController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilPermissaoController;
 use App\Http\Controllers\PermissaoController;
 use App\Http\Controllers\UserController;
+
 use App\Models\PerfilPermissao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +24,14 @@ Route::group(['middleware'=>'apiJWT'], function() {
         Route::get('me', [AuthController::class, 'me']);
         Route::get('logout', [AuthController::class, 'logout']);
         Route::get('refresh', [AuthController::class, 'refresh']);
+    });
+
+    Route::group(['prefix'=>'commonarea'], function() {
+        Route::get('', [CommonAreaController::class, 'getAll']);
+        Route::get('{id}', [CommonAreaController::class, 'getById']);
+        Route::post('', [CommonAreaController::class, 'save']);
+        Route::put('{id}', [CommonAreaController::class, 'update']);
+        Route::delete('{id}', [CommonAreaController::class, 'delete']);
     });
 
     Route::group(['prefix'=>'condominio', 'where'=>['id'=>'[0-9]+']], function() {

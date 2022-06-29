@@ -25,7 +25,7 @@ class AuthController extends Controller {
         $this->userRepository = $userRepository;
         $this->perfilRepository = $perfilRepository;
     }
- 
+
     public function login(Request $request) {
         $credentials = $request->only(['email', 'password']);
         $token = auth('api')->attempt($credentials);
@@ -50,13 +50,13 @@ class AuthController extends Controller {
     public function me() {
         return response()->json(auth('api')->user());
     }
- 
+
     public function logout() {
         auth()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
- 
+
     public function refresh() {
         return $this->respondWithToken(auth()->refresh());
     }
