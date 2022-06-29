@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\CommonArea;
 
 class CommonAreaController extends Controller {
-    private $validator;
     private $rules = [
         'name'=> 'required|string|max:255',
     ];
-
-    public function __construct(Validator $validator) {
-        $this->validator = $validator;
-    }
 
     public function getAll(Request $request) {
         $commonAreas = CommonArea::all();
@@ -29,27 +27,36 @@ class CommonAreaController extends Controller {
     }
 
     public function save(Request $request) {
-        $data = $request->all();
+        try {
+            $data = $request->all();
 
-        super::validateFields($data, $this->rules);
-
-        $commonArea = CommonArea::create($data);
-        return response()->json($commonArea);
+            parent::validateFields($data, $this->rules);
+    
+            $commonArea = CommonArea::create($data);
+            return response()->json($commonArea);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function update(Request $request, $id) {
-        $fields = $request->only('name');
+        try {
+            $data = $request->only('name');
+            parent::validateFields($data, $this->rules);
 
-        super::validateFields($data, $this->rules);
-
-        $commonArea = CommonArea::findOrFail($id);
-        $commonArea->update($fields);
-        return response()->json($commonArea);
+            $commonArea = CommonArea::findOrFail($id)->update($data);
+            return response()->json($commonArea);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Registro não econtrado'], 404);
+        }
     }
 
     public function delete(Request $request, $id) {
-        $commonArea = CommonArea::findOrFail($id);
-        $commonArea->delete();
-        return response()->json($commonArea);
+        try {
+            $commonArea = CommonArea::findOrFail($id)->delete();
+            return response()->json($commonArea);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Registro não econtrado'], 404);
+        }
     }
 }
