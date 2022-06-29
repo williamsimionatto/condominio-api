@@ -7,14 +7,20 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Helpers\Validator;
 
 class Controller extends BaseController {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    private $validator;
 
-    // protected function validaPermissao($token, $siglaPermissao, $tipoPermissao) {
-    //     // return $this->validaPermissao($request->bearerToken(), 'CAD_USUARIO', 'consultar');
-    //     $dados = JWTAuth::getPayload($token)->toArray();
-    //     $user = $dados['sub'];
-    //     return $user;
-    // }
+    public function __construct(Validator $validator) {
+        $this->validator = $validator;
+    }
+
+    protected function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            throw new \Exception($isValid['errors'][0]);
+        }
+    }
 }
