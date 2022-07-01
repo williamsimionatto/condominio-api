@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthController::class, 'login']);
 
-Route::group(['middleware'=>'apiJWT'], function() {
+Route::group(['middleware'=>['apiJWT', 'cors']], function() {
     Route::group(['prefix'=>'auth'], function() {
         Route::get('me', [AuthController::class, 'me']);
         Route::get('logout', [AuthController::class, 'logout']);
