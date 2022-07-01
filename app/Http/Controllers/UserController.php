@@ -36,7 +36,7 @@ class UserController extends Controller {
                 'cpf' => 'required|string|max:14|',
             ];
         
-        $this->validateFields($data, $rules);
+        parent::validateFields($data, $rules);
 
         $algo = Hash::make($request->password);
         $request->offsetSet('password', $algo);
@@ -53,7 +53,7 @@ class UserController extends Controller {
             'email' => 'required|string|email|max:255'
         ];
 
-        $this->validateFields($fields, $rules);
+        parent::validateFields($fields, $rules);
 
         $user = $this->repository->update($id, $fields);
         return response()->json($user);
@@ -80,12 +80,5 @@ class UserController extends Controller {
     public function verifyPassword(Request $request, $id) {
         $igual = $this->repository->verifyPassword($id, $request->password);
         return response()->json(['ok'=>$igual]);
-    }
-
-    private function validateFields(Array $data, Array $rules) {
-        $isValid = $this->validator->validate($data, $rules);
-        if ($isValid['fails']) {
-            return response(['errors'=>$isValid['errors']], 422);
-        }
     }
 }

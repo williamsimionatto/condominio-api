@@ -46,8 +46,4 @@ class PerfilPermissaoController extends Controller {
         $this->repository->deletePermissoesByPerfil($idPerfil);
         return response()->json(['success' => true]);
     }
-
-    public function validateFields(Array $data, Array $rules) {
-        return $this->validator->validate($data, $rules);
-    }
 }

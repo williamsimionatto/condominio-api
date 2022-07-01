@@ -41,9 +41,20 @@ class LeituraAguaReportController extends Controller {
             LEFT JOIN leitura_agua_documentos lad ON lad.leitura_agua_valores = lav.id
             JOIN condomino c ON lav.condomino = c.id
             LEFT JOIN (
-                SELECT sub_lav.consumo, sub_lav.condomino, sub_la.dataleitura 
+                SELECT sub_lav.consumo, 
+                        CASE WHEN c.ativo = 'N' 
+                                THEN (
+                                    SELECT co.id 
+                                    FROM condomino co 
+                                    WHERE co.apartamento = c.apartamento AND co.ativo = 'S' 
+                                    LIMIT 1 
+                                )
+                                ELSE sub_lav.condomino
+                            END AS condomino, 
+                        sub_la.dataleitura
                 FROM leitura_agua_valores sub_lav
                 JOIN leitura_agua sub_la ON sub_lav.leitura_agua  = sub_la.id
+                JOIN condomino c ON sub_lav.condomino = c.id
             ) AS sub ON sub.condomino = lav.condomino AND EXTRACT(YEAR_MONTH FROM sub.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(la.dataleitura, INTERVAL 1 MONTH))
             WHERE TRUE AND DATE_SUB(la.dataleitura, INTERVAL 1 MONTH) BETWEEN :dataInicial AND :dataFinal $condomino
             GROUP BY la.dataleitura, lav.condomino

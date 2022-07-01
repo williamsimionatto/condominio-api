@@ -31,7 +31,7 @@ class PermissaoController extends Controller {
 
     public function save(Request $request) {
         $data = $request->all();
-        $this->validateFields($data, $this->rules);
+        parent::validateFields($data, $this->rules);
 
         $perfil = $this->repository->save($data);
         return response()->json($perfil);
@@ -39,7 +39,7 @@ class PermissaoController extends Controller {
 
     public function update(Request $request, $id) {
         $fields = $request->only('name', 'sigla');
-        $this->validateFields($fields, $this->rules);
+        parent::validateFields($fields, $this->rules);
 
         $perfil = $this->repository->update($id, $fields);
         return response()->json($perfil);
@@ -52,12 +52,5 @@ class PermissaoController extends Controller {
         }
 
         return response('', 500);
-    }
-
-    private function validateFields(Array $data, Array $rules) {
-        $isValid = $this->validator->validate($data, $rules);
-        if ($isValid['fails']) {
-            return response()->json($isValid['errors'], 422);
-        }
     }
 }

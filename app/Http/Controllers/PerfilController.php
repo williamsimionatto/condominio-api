@@ -55,11 +55,4 @@ class PerfilController extends Controller {
             return response('', 500);
         }
     }
-
-    private function validateFields(Array $data, Array $rules) {
-        $isValid = $this->validator->validate($data, $rules);
-        if ($isValid['fails']) {
-            return response(['errors'=>$isValid['errors']], 422);
-        }
-    }
 }
