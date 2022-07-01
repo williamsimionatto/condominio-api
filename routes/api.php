@@ -21,12 +21,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware'=>['apiJWT', 'cors']], function() {
-    Route::group(['prefix'=>'auth'], function() {
-        Route::get('me', [AuthController::class, 'me']);
-        Route::get('logout', [AuthController::class, 'logout']);
-        Route::get('refresh', [AuthController::class, 'refresh']);
-    });
-
     Route::group(['prefix'=>'commonarea'], function() {
         Route::get('', [CommonAreaController::class, 'getAll']);
         Route::get('{id}', [CommonAreaController::class, 'getById']);
