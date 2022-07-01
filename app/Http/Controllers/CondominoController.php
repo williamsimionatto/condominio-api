@@ -65,6 +65,8 @@ class CondominoController extends Controller implements GetAllInterface,
 
             if ($condomino->ativo == 'N') {
                 $this->userRepository->inactive($condomino->cpf);
+                $condomino['inactive_at'] = date('Y-m-d H:i:s');
+                $condomino = $this->repository->save($condomino);
             }
 
             return response()->json($condomino);

@@ -83,21 +83,12 @@ class LeituraAguaValoresRepository extends BaseRepository implements LeituraAgua
             LEFT JOIN leitura_agua_documentos lad ON lad.leitura_agua_valores = lav.id
             JOIN condomino c ON lav.condomino = c.id
             LEFT JOIN (
-                SELECT lav.consumo,
-                    	CASE WHEN c.ativo = 'N' 
-			                    THEN (
-                                    SELECT co.id 
-                                    FROM condomino co 
-                                    WHERE co.apartamento = c.apartamento AND co.ativo = 'S' 
-                                    LIMIT 1 
-                                )
-                            ELSE lav.condomino
-                        END AS condomino
+                SELECT lav.consumo, lav.condomino, c.apartamento
                 FROM leitura_agua_valores lav
                 JOIN leitura_agua la ON lav.leitura_agua  = la.id
                 JOIN condomino c ON c.id = lav.condomino 
                 WHERE EXTRACT(YEAR_MONTH FROM la.dataleitura) = EXTRACT(YEAR_MONTH FROM DATE_SUB(:dataLeitura, INTERVAL 1 MONTH))
-            ) AS sub ON sub.condomino = lav.condomino
+            ) AS sub ON sub.apartamento = c.apartamento
             WHERE lav.leitura_agua = :idLeitura
             ORDER BY c.position",
             [
