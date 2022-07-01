@@ -60,11 +60,13 @@ class CondominoController extends Controller implements GetAllInterface,
     public function save(Request $request): JsonResponse {
         try {
             $data = $request->all();
-            $this->validateFields($data, $this->rules);
+            parent::validateFields($data, $this->rules);
             $condomino = $this->repository->save($data);
 
             if ($condomino->ativo == 'N') {
                 $this->userRepository->inactive($condomino->cpf);
+                $condomino['inactive_at'] = date('Y-m-d H:i:s');
+                $condomino = $this->repository->save($condomino);
             }
 
             return response()->json($condomino);
@@ -76,14 +78,14 @@ class CondominoController extends Controller implements GetAllInterface,
     public function update(Request $request, $id): JsonResponse {
         try {
             $data = $request->all();
-            $this->validateFields($data, $this->rules);
+            parent::validateFields($data, $this->rules);
 
-            $condominio = $this->repository->update($id, $data);
+            $condomino = $this->repository->update($id, $data);
             if ($condomino->ativo == 'N') {
                 $this->userRepository->inactive($condomino->cpf);
             }
 
-            return response()->json($condominio);
+            return response()->json($condomino);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -91,12 +93,5 @@ class CondominoController extends Controller implements GetAllInterface,
 
     public function delete(Request $request, $id): JsonResponse {
         return response('', 404)->json('');
-    }
-
-    private function validateFields(Array $data, Array $rules) {
-        $isValid = $this->validator->validate($data, $rules);
-        if ($isValid['fails']) {
-            return response(['errors'=>$isValid['errors']], 422);
-        }
     }
 }

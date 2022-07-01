@@ -77,7 +77,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     public function save(Request $request): JsonResponse {
         try {
             $data = $request->all();
-            $this->validateFields($data, $this->rules);
+            parent::validateFields($data, $this->rules);
 
             if ($this->repository->isUniqueLeituraMonth($data['condominio'], $data['dataleitura'])) {
                 throw new Error('Já existe uma leitura para mês-ano informado!');
@@ -111,7 +111,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
 
     public function update(Request $request, $id): JsonResponse {
         $data = $request->all();
-        $this->validateFields($data, $this->rules);
+        parent::validateFields($data, $this->rules);
 
         $leitura = $this->repository->update($id, $data);
         return response()->json($leitura);
@@ -124,13 +124,6 @@ class LeituraAguaController extends Controller implements GetAllInterface,
         }
 
         return response()->json(['message' => 'Não foi possível excluir este condomínio'], 500);
-    }
-
-    private function validateFields(Array $data, Array $rules) {
-        $isValid = $this->validator->validate($data, $rules);
-        if ($isValid['fails']) {
-            return response(['errors'=>$isValid['errors']], 422);
-        }
     }
 
     public function isUniqueLeituraMonth(Request $request) {

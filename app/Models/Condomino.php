@@ -19,6 +19,7 @@ class Condomino extends Model {
         'tipo',
         'ativo',
         'position',
+        'inactive_at',
     ];
 
     public function leituraAgua() {
