@@ -10,12 +10,11 @@ use App\Http\Controllers\LeituraAguaReportController;
 use App\Http\Controllers\LeituraAguaValoresController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilPermissaoController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\PermissaoController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 
-use App\Models\PerfilPermissao;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthController::class, 'login']);
@@ -68,6 +67,14 @@ Route::group(['middleware'=>['apiJWT', 'cors']], function() {
         Route::post('/', [PerfilController::class, 'save']);
         Route::put('/{id}', [PerfilController::class, 'update']);
         Route::delete('/{id}', [PerfilController::class, 'delete']);
+    });
+
+    Route::group(['prefix'=>'period', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::get('', [PeriodController::class, 'getAll']);
+        Route::get('{id}', [PeriodController::class, 'getById']);
+        Route::post('', [PeriodController::class, 'save']);
+        Route::put('{id}', [PeriodController::class, 'update']);
+        Route::delete('{id}', [PeriodController::class, 'delete']);
     });
 
     Route::group(['prefix'=>'permissao', 'where'=>['id'=>'[0-9]+']], function() {
