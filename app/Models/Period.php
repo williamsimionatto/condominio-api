@@ -10,4 +10,8 @@ class Period extends Model {
     protected $table = "periods";
     protected $fillable = ['start_date', 'end_date', 'status'];
     protected $hidden = ['created_at', 'updated_at'];
+
+    public function cashFlows() {
+        return $this->hasMany('App\Models\CashFlow');
+    }
 }
