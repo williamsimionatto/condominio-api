@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Period;
 use App\Models\Condominio;
-
 class LeituraAgua extends Model {
     use HasFactory;
     protected $table = "leitura_agua";
@@ -18,7 +18,7 @@ class LeituraAgua extends Model {
     ];
 
     public function condominio() {
-        return $this->belongsTo(Condomino::class, 'condominio');
+        return $this->belongsTo(Condominio::class, 'condominio');
     }
 
     public function valores() {
@@ -26,6 +26,6 @@ class LeituraAgua extends Model {
     }
 
     public function periodo() {
-        return $this->belongsTo(Periodo::class, 'period_id');
+        return $this->belongsTo(Period::class, 'period_id');
     }
 }
