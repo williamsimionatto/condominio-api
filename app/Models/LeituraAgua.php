@@ -13,7 +13,8 @@ class LeituraAgua extends Model {
     protected $fillable = [
         'condominio',
         'dataleitura',
-        'datavencimento'
+        'datavencimento',
+        'period_id',
     ];
 
     public function condominio() {
@@ -22,5 +23,9 @@ class LeituraAgua extends Model {
 
     public function valores() {
         return $this->hasMany(LeituraAguaValores::class, 'leitura_agua');
+    }
+
+    public function periodo() {
+        return $this->belongsTo(Periodo::class, 'period_id');
     }
 }
