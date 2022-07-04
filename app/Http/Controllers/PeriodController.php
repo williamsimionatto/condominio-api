@@ -28,12 +28,14 @@ class PeriodController extends Controller {
             return response()->json($period);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Período não encontrado'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function save(Request $request) {
         try {
-            parent::validate($request, $this->rules);
+            $this->validate($request, $this->rules);
             $period = Period::create($request->all());
             return response()->json($period);
         } catch (\Exception $e) {
@@ -43,7 +45,7 @@ class PeriodController extends Controller {
 
     public function update(Request $request, $id) {
         try {
-            parent::validate($request, $this->rules);
+            $this->validate($request, $this->rules);
             $period = Period::findOrFail($id);
             $period->update($request->all());
             return response()->json($period);
@@ -63,6 +65,13 @@ class PeriodController extends Controller {
             return response()->json(['error' => 'Período não encontrado'], 404);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    protected function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            throw new \Exception($isValid['errors'][0]);
         }
     }
 }

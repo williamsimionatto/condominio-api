@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Validator;
 use App\Repository\Eloquent\PermissaoRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class PermissaoController extends Controller {
@@ -20,29 +21,49 @@ class PermissaoController extends Controller {
     }
 
     public function getAll(Request $request) {
-        $perfils = $this->repository->getAll();
-        return response()->json($perfils);
+        try {
+            $perfis = $this->repository->getAll();
+            return response()->json($perfis);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function getById(Request $request, $id) {
-        $perfil = $this->repository->getById($id);
-        return response()->json($perfil);
+        try {
+            $perfil = $this->repository->getById($id);
+            return response()->json($perfil);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Registro não econtrado'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function save(Request $request) {
-        $data = $request->all();
-        parent::validateFields($data, $this->rules);
+        try {
+            $data = $request->all();
+            $this->validateFields($data, $this->rules);
 
-        $perfil = $this->repository->save($data);
-        return response()->json($perfil);
+            $perfil = $this->repository->save($data);
+            return response()->json($perfil);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, $id) {
-        $fields = $request->only('name', 'sigla');
-        parent::validateFields($fields, $this->rules);
-
-        $perfil = $this->repository->update($id, $fields);
-        return response()->json($perfil);
+        try {
+            $fields = $request->only('name', 'sigla');
+            $this->validateFields($fields, $this->rules);
+    
+            $perfil = $this->repository->update($id, $fields);
+            return response()->json($perfil);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Registro não econtrado'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function delete(Request $request, $id) {
@@ -52,5 +73,12 @@ class PermissaoController extends Controller {
         }
 
         return response('', 500);
+    }
+
+    protected function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            throw new \Exception($isValid['errors'][0]);
+        }
     }
 }

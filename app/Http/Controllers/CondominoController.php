@@ -60,7 +60,7 @@ class CondominoController extends Controller implements GetAllInterface,
     public function save(Request $request): JsonResponse {
         try {
             $data = $request->all();
-            parent::validateFields($data, $this->rules);
+            $this->validateFields($data, $this->rules);
             $condomino = $this->repository->save($data);
 
             if ($condomino->ativo == 'N') {
@@ -78,7 +78,7 @@ class CondominoController extends Controller implements GetAllInterface,
     public function update(Request $request, $id): JsonResponse {
         try {
             $data = $request->all();
-            parent::validateFields($data, $this->rules);
+            $this->validateFields($data, $this->rules);
 
             $condomino = $this->repository->update($id, $data);
             if ($condomino->ativo == 'N') {
@@ -93,5 +93,12 @@ class CondominoController extends Controller implements GetAllInterface,
 
     public function delete(Request $request, $id): JsonResponse {
         return response('', 404)->json('');
+    }
+
+    protected function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            throw new \Exception($isValid['errors'][0]);
+        }
     }
 }

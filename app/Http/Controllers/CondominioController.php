@@ -74,7 +74,7 @@ class CondominioController extends Controller implements GetAllInterface,
         }
 
         $data = $request->all();
-        parent::validateFields($data, $this->rules);
+        $this->validateFields($data, $this->rules);
 
         if (!$this->cnpjValidator->isValid($data['cnpj'])) {
             return response()->json(['message' => 'CNPJ inválido'], 500);
@@ -91,7 +91,7 @@ class CondominioController extends Controller implements GetAllInterface,
         }
 
         $data = $request->all();
-        parent::validateFields($data, $this->rules);
+        $this->validateFields($data, $this->rules);
 
         if (!$this->cnpjValidator->isValid($data['cnpj'])) {
             return response()->json(['message' => 'CNPJ inválido'], 500);
@@ -113,5 +113,12 @@ class CondominioController extends Controller implements GetAllInterface,
         }
 
         return response()->json(['message' => 'Não foi possível excluir este condomínio'], 500);
+    }
+
+    protected function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            throw new \Exception($isValid['errors'][0]);
+        }
     }
 }

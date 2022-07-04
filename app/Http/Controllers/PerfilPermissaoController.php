@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Validator;
-use App\Models\PerfilPermissao;
 use App\Repository\Eloquent\PerfilPermissaoRepository;
 use Illuminate\Http\Request;
 
 class PerfilPermissaoController extends Controller {
     private $repository;
-    private $validator;
 
-    public function __construct(PerfilPermissaoRepository $repository, Validator $validator) {
+    public function __construct(PerfilPermissaoRepository $repository) {
         $this->repository = $repository;
-        $this->validator = $validator;
     }
 
     public function save(Request $request) {

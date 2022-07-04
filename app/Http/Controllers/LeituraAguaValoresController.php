@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Condominio;
-use App\Models\LeituraAguaValores;
 use App\Repository\Eloquent\LeituraAguaValoresRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LeituraAguaValoresController extends Controller {
     private $leituraAguaValoresRepository;
-    private $condominioRepository;
 
     public function __construct(
         LeituraAguaValoresRepository $leituraAguaValores
