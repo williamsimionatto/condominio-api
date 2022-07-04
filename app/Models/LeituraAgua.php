@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Period;
 use App\Models\Condominio;
+
 class LeituraAgua extends Model {
     use HasFactory;
     protected $table = "leitura_agua";
