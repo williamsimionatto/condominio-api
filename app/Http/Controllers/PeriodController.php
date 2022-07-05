@@ -15,7 +15,7 @@ class PeriodController extends Controller {
 
     public function getAll(Request $request) {
         try {
-            $periods = Period::all();
+            $periods = Period::orderBy('start_date', 'desc')->get();
             return response()->json($periods);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
