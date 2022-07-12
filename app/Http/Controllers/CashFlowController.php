@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Validator;
 use App\Models\CashFlow;
+use App\Models\Period;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -51,6 +53,17 @@ class CashFlowController extends Controller {
             ->get();
 
         return response()->json($cashFlows);
+    }
+
+    public function get(Request $request, $periodId) {
+        try {
+            $cashFlow = Period::findOrFail($periodId)->load('cashFlows');
+            return response()->json($cashFlow);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Período não encontrado'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        } 
     }
 
     public function save(Request $request) {
