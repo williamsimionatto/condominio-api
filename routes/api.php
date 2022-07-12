@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CashFlowController;
 use App\Http\Controllers\CommonAreaController;
 use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\CondominoController;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware'=>['apiJWT', 'cors']], function() {
+    Route::group(['prefix'=>'cashflow'], function () {
+        Route::post('', [CashFlowController::class, 'save']);
+    });
+
     Route::group(['prefix'=>'commonarea'], function() {
         Route::get('', [CommonAreaController::class, 'getAll']);
         Route::get('{id}', [CommonAreaController::class, 'getById']);
