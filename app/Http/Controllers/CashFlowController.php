@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Validator;
 use App\Models\CashFlow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CashFlowController extends Controller {
     private $validator;
@@ -18,6 +19,38 @@ class CashFlowController extends Controller {
 
     public function __construct(Validator $validator) {
         $this->validator = $validator;
+    }
+
+    public function getAll(Request $request) {
+        $cashFlows = CashFlow::select(
+            'period_id', 'periods.name', 'type', 'amount',
+            DB::raw("SUM(
+                        CASE WHEN type = 'E' 
+                            THEN amount 
+                            ELSE -amount 
+                        END
+                    ) as total_amount"
+                ),
+            DB::raw("SUM(
+                        CASE WHEN type = 'E' 
+                            THEN amount 
+                            ELSE 0
+                        END
+                    ) as total_income"
+                ),
+            DB::raw("SUM(
+                        CASE WHEN type = 'S' 
+                            THEN amount 
+                            ELSE 0
+                        END
+                    ) as total_expense"
+                ),
+            )
+            ->join('periods', 'periods.id', '=', 'cash_flows.period_id')
+            ->groupBy('period_id')
+            ->get();
+
+        return response()->json($cashFlows);
     }
 
     public function save(Request $request) {
