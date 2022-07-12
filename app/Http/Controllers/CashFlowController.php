@@ -70,6 +70,22 @@ class CashFlowController extends Controller {
         }
     }
 
+    public function update(Request $request, $id) {
+        try {
+            $data = $request->only(['date', 'amount', 'description', 'type']);
+
+            $this->validateFields($data, $this->rules);
+
+            $cashFlow = CashFlow::findOrFail($id);
+            $cashFlow->update($data);
+            return response()->json($cashFlow);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Registro não encontrado'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     protected function validateFields(Array $data, Array $rules) {
         $isValid = $this->validator->validate($data, $rules);
         if ($isValid['fails']) {

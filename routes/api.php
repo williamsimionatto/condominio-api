@@ -25,6 +25,7 @@ Route::group(['middleware'=>['apiJWT', 'cors']], function() {
         Route::get('', [CashFlowController::class, 'getAll']);
         Route::get('{periodId}', [CashFlowController::class, 'get']);
         Route::post('', [CashFlowController::class, 'save']);
+        Route::put('{id}', [CashFlowController::class, 'save']);
     });
 
     Route::group(['prefix'=>'commonarea'], function() {
