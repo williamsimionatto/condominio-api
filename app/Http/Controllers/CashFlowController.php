@@ -27,24 +27,15 @@ class CashFlowController extends Controller {
         $cashFlows = CashFlow::select(
             'period_id', 'periods.name', 'type', 'amount',
             DB::raw("SUM(
-                        CASE WHEN type = 'E' 
-                            THEN amount 
-                            ELSE -amount 
-                        END
+                        CASE WHEN type = 'E' THEN amount ELSE -amount END
                     ) as total_amount"
                 ),
             DB::raw("SUM(
-                        CASE WHEN type = 'E' 
-                            THEN amount 
-                            ELSE 0
-                        END
+                        CASE WHEN type = 'E' THEN amount ELSE 0 END
                     ) as total_income"
                 ),
             DB::raw("SUM(
-                        CASE WHEN type = 'S' 
-                            THEN amount 
-                            ELSE 0
-                        END
+                        CASE WHEN type = 'S' THEN amount ELSE 0 END
                     ) as total_expense"
                 ),
             )
