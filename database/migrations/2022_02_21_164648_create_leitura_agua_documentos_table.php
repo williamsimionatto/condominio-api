@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateLeituraAguaDocumentosTable extends Migration
@@ -23,7 +24,7 @@ class CreateLeituraAguaDocumentosTable extends Migration
             $table->timestamps();
         });
 
-        DB::statement("ALTER TABLE leitura_agua_documentos ADD arquivo LONGBLOB");
+        DB::statement("ALTER TABLE leitura_agua_documentos MODIFY COLUMN arquivo LONGBLOB");
 
         Schema::table('leitura_agua_documentos', function (Blueprint $table) {
             $table->foreign('leitura_agua_valores')->references('id')->on('leitura_agua_valores');
