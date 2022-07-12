@@ -86,6 +86,18 @@ class CashFlowController extends Controller {
         }
     }
 
+    public function delete(Request $request, $id) {
+        try {
+            $cashFlow = CashFlow::findOrFail($id);
+            $cashFlow->delete();
+            return response()->json(['success' => 'Registro excluído com sucesso']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Registro não encontrado'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     protected function validateFields(Array $data, Array $rules) {
         $isValid = $this->validator->validate($data, $rules);
         if ($isValid['fails']) {
