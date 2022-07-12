@@ -30,7 +30,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     private $validator;
     private $rules = [
         'condominio'=> 'required|numeric',
-        'dataleiutra'=> 'required|string',
+        'dataleitura'=> 'required|string',
         'datavencimento'=> 'required|string',
     ];
 
@@ -77,7 +77,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
     public function save(Request $request): JsonResponse {
         try {
             $data = $request->all();
-            parent::validateFields($data, $this->rules);
+            $this->validateFields($data, $this->rules);
 
             if ($this->repository->isUniqueLeituraMonth($data['condominio'], $data['dataleitura'])) {
                 throw new Error('Já existe uma leitura para mês-ano informado!');
@@ -111,7 +111,7 @@ class LeituraAguaController extends Controller implements GetAllInterface,
 
     public function update(Request $request, $id): JsonResponse {
         $data = $request->all();
-        parent::validateFields($data, $this->rules);
+        $this->validateFields($data, $this->rules);
 
         $leitura = $this->repository->update($id, $data);
         return response()->json($leitura);
@@ -138,6 +138,13 @@ class LeituraAguaController extends Controller implements GetAllInterface,
             return response()->json(['unique'=>!$leitura]);
         } catch (Error $e) {
             return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    protected function validateFields(Array $data, Array $rules) {
+        $isValid = $this->validator->validate($data, $rules);
+        if ($isValid['fails']) {
+            throw new \Exception($isValid['errors'][0]);
         }
     }
 }
