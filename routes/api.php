@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthController::class, 'login']);
 
-Route::group(['middleware'=>['apiJWT', 'cors']], function() {
+Route::group(['middleware'=>['cors', 'apiJWT', 'permissions']], function() {
     Route::group(['prefix'=>'cashflow'], function () {
         Route::get('', [CashFlowController::class, 'getAll']);
         Route::get('{periodId}', [CashFlowController::class, 'get']);

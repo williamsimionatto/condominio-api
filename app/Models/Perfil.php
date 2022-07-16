@@ -15,7 +15,7 @@ class Perfil extends Model {
         return $this->hasMany(User::class, 'perfil_id');
     }
 
-    public function perfilPermissao() {
+    public function permissions() {
         return $this->hasMany(PerfilPermissao::class, 'perfil');
     }
 }
