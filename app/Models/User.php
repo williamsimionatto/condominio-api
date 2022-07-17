@@ -28,7 +28,7 @@ class User extends Authenticatable implements JWTSubject {
     ];
 
     public function perfil() {
-        return $this->hasOne(Perfil::class, 'perfil_id');
+        return $this->hasOne(Perfil::class, 'id', 'perfil_id');
     }
 
     public function getJWTIdentifier() {
@@ -43,5 +43,14 @@ class User extends Authenticatable implements JWTSubject {
                 'email' => $this->email,
             ]
         ];
+    }
+
+    public function hasPermission($pemrissionSlug, $type) {
+        $permission = Permissao::where('sigla', $pemrissionSlug)->first();
+        $hasPermission = PerfilPermissao::where('perfil', $this->perfil_id)
+            ->where('permissao', $permission->id)
+            ->first();
+
+        return $hasPermission->$type === 'S';
     }
 }
