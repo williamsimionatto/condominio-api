@@ -47,10 +47,10 @@ class User extends Authenticatable implements JWTSubject {
 
     public function hasPermission($pemrissionSlug, $type) {
         $permission = Permissao::where('sigla', $pemrissionSlug)->first();
-        $rolePermission = PerfilPermissao::where('perfil', $this->perfil_id)
+        $hasPermission = PerfilPermissao::where('perfil', $this->perfil_id)
             ->where('permissao', $permission->id)
             ->first();
 
-        return $rolePermission->$type === 'S';
+        return $hasPermission->$type === 'S';
     }
 }
