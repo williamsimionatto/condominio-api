@@ -6,6 +6,7 @@ use App\Http\Controllers\CommonAreaController;
 use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\CondominoController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\HistoricoValoresController;
 use App\Http\Controllers\LeituraAguaController;
 use App\Http\Controllers\LeituraAguaReportController;
 use App\Http\Controllers\LeituraAguaValoresController;
@@ -50,6 +51,10 @@ Route::group(['middleware'=>['cors', 'apiJWT', 'permissions']], function() {
         Route::get('{id}', [CondominoController::class, 'getByCondomino']);
         Route::post('', [CondominoController::class, 'save']);
         Route::put('{id}', [CondominoController::class, 'update']);
+    });
+
+    Route::group(['prefix'=>'historicovalores', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::get('{id}', [HistoricoValoresController::class, 'getByLeitura']);
     });
 
     Route::group(['prefix'=>'leituraagua', 'where'=>['id'=>'[0-9]+']], function() {
