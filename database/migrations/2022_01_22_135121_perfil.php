@@ -27,7 +27,8 @@ class Perfil extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropForeign(['perfil_id']);
+            $table->dropColumn('perfil_id');
         });
     }
 }

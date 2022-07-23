@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CashFlowController;
 use App\Http\Controllers\CommonAreaController;
 use App\Http\Controllers\CondominioController;
 use App\Http\Controllers\CondominoController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\HistoricoValoresController;
 use App\Http\Controllers\LeituraAguaController;
 use App\Http\Controllers\LeituraAguaReportController;
 use App\Http\Controllers\LeituraAguaValoresController;
@@ -19,7 +21,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthController::class, 'login']);
 
-Route::group(['middleware'=>['apiJWT', 'cors']], function() {
+Route::group(['middleware'=>['cors', 'apiJWT', 'permissions']], function() {
+    Route::group(['prefix'=>'cashflow'], function () {
+        Route::get('', [CashFlowController::class, 'getAll']);
+        Route::get('{periodId}', [CashFlowController::class, 'get']);
+        Route::post('', [CashFlowController::class, 'save']);
+        Route::put('{id}', [CashFlowController::class, 'update']);
+        Route::delete('{id}', [CashFlowController::class, 'delete']);
+    });
+
     Route::group(['prefix'=>'commonarea'], function() {
         Route::get('', [CommonAreaController::class, 'getAll']);
         Route::get('{id}', [CommonAreaController::class, 'getById']);
@@ -41,6 +51,10 @@ Route::group(['middleware'=>['apiJWT', 'cors']], function() {
         Route::get('{id}', [CondominoController::class, 'getByCondomino']);
         Route::post('', [CondominoController::class, 'save']);
         Route::put('{id}', [CondominoController::class, 'update']);
+    });
+
+    Route::group(['prefix'=>'historicovalores', 'where'=>['id'=>'[0-9]+']], function() {
+        Route::get('{id}', [HistoricoValoresController::class, 'getByLeitura']);
     });
 
     Route::group(['prefix'=>'leituraagua', 'where'=>['id'=>'[0-9]+']], function() {
