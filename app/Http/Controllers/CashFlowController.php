@@ -28,7 +28,7 @@ class CashFlowController extends Controller {
             'period_id', 'periods.name', 'type', 'amount',
             DB::raw("SUM(
                         CASE WHEN type = 'E' THEN amount ELSE -amount END
-                    ) as total_amount"
+                    ) as balance"
                 ),
             DB::raw("SUM(
                         CASE WHEN type = 'E' THEN amount ELSE 0 END
