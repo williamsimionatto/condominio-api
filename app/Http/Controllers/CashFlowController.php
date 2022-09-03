@@ -27,6 +27,7 @@ class CashFlowController extends Controller {
         $cashFlows = Period::select(
             'periods.id', 
             'periods.name',
+            'periods.status',
             DB::raw("COALESCE(
                 SUM(
                     CASE WHEN type = 'E' THEN amount ELSE -amount END
