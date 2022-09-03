@@ -24,23 +24,28 @@ class CashFlowController extends Controller {
     }
 
     public function getAll(Request $request) {
-        $cashFlows = CashFlow::select(
-            'period_id', 'periods.name', 'type', 'amount',
-            DB::raw("SUM(
-                        CASE WHEN type = 'E' THEN amount ELSE -amount END
-                    ) as balance"
-                ),
-            DB::raw("SUM(
+        $cashFlows = Period::select(
+            'periods.id', 
+            'periods.name',
+            DB::raw("COALESCE(
+                SUM(
+                    CASE WHEN type = 'E' THEN amount ELSE -amount END
+                ), 0) as balance"
+            ),
+            DB::raw("COALESCE(
+                    SUM(
                         CASE WHEN type = 'E' THEN amount ELSE 0 END
-                    ) as total_income"
+                    ), 0) as total_income"
                 ),
-            DB::raw("SUM(
+            DB::raw("COALESCE(
+                    SUM(
                         CASE WHEN type = 'S' THEN amount ELSE 0 END
-                    ) as total_expense"
+                    ), 0) as total_expense"
                 ),
             )
-            ->join('periods', 'periods.id', '=', 'cash_flows.period_id')
-            ->groupBy('period_id')
+            ->leftJoin('cash_flows as cf', 'cf.period_id', '=', 'periods.id')
+            ->groupBy('periods.id')
+            ->orderBy('periods.start_date', 'desc')
             ->get();
 
         return response()->json($cashFlows);
