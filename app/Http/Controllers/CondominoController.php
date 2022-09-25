@@ -26,7 +26,7 @@ class CondominoController extends Controller implements GetAllInterface,
     private $rules = [
         'name' => 'required|string|max:255',
         'cpf' => 'required|string|max:255',
-        'sindico' => 'required|boolean',
+        'sindico' => 'required|string|max:1',
         'tipo' => 'required|string|max:1',
         'numeroquartos' => 'required|integer',
         'apartamento' => 'required|integer|string',
