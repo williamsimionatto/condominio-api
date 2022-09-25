@@ -54,8 +54,12 @@ class CashFlowController extends Controller {
 
     public function get(Request $request, $periodId) {
         try {
-            $cashFlow = Period::findOrFail($periodId)->load('cashFlows');
-            return response()->json($cashFlow);
+            $period = Period::findOrFail($periodId)->load('cashFlows');
+            $period->total_income = $period->cashFlows->where('type', 'E')->sum('amount');
+            $period->total_expense = $period->cashFlows->where('type', 'S')->sum('amount');
+            $period->balance = $period->total_income - $period->total_expense;
+
+            return response()->json($period);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Período não encontrado'], 404);
         } catch (\Exception $e) {
