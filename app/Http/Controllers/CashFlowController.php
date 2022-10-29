@@ -28,6 +28,7 @@ class CashFlowController extends Controller {
             'periods.id', 
             'periods.name',
             'periods.status',
+            DB::raw('YEAR(periods.start_date) as year'),
             DB::raw("COALESCE(
                 SUM(
                     CASE WHEN type = 'E' THEN amount ELSE -amount END
