@@ -24,10 +24,11 @@ class CashFlowController extends Controller {
     }
 
     public function getAll(Request $request) {
-        $cashFlows = Period::select(
+        $query = Period::select(
             'periods.id', 
             'periods.name',
             'periods.status',
+            DB::raw('YEAR(periods.start_date) as year'),
             DB::raw("COALESCE(
                 SUM(
                     CASE WHEN type = 'E' THEN amount ELSE -amount END
@@ -46,10 +47,15 @@ class CashFlowController extends Controller {
             )
             ->leftJoin('cash_flows as cf', 'cf.period_id', '=', 'periods.id')
             ->groupBy('periods.id')
-            ->orderBy('periods.start_date', 'desc')
-            ->get();
+            ->orderBy('periods.start_date', 'desc');
 
-        return response()->json($cashFlows);
+        if ($request->has('year')) {
+            $query->whereYear('periods.start_date', $request->year);
+        }
+
+        $cashFlow = $query->get();
+
+        return response()->json($cashFlow);
     }
 
     public function get(Request $request, $periodId) {
