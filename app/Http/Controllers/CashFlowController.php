@@ -53,12 +53,8 @@ class CashFlowController extends Controller {
             $query->whereYear('periods.start_date', $request->year);
         }
 
-        if ($request->has('startDate')) {
-            $query->where('periods.start_date', '>=', $request->startDate);
-        }
-
-        if ($request->has('endDate')) {
-            $query->where('periods.end_date', '<=', $request->endDate);
+        if ($request->has('startDate') && $request->has('endDate')) {
+            $query->whereBetween('periods.start_date', [$request->startDate, $request->endDate]);
         }
 
         $cashFlow = $query->get();
